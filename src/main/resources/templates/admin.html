@@ -1,0 +1,17 @@
+<!DOCTYPE html> 
+<html xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:th="https://www.thymeleaf.org" 
+   xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"> 
+   <head> 
+      <title>
+         Hello Admin!
+      </title> 
+   </head>
+   <body> 
+      <p>Admin Console</p>
+      <h1 th:inline="text">Welcome <span sec:authentication="name"></span>!</h1> 
+	  <form th:action="@{/logout}" method="post">
+	      <button type="submit">Sign Out</button>
+	  </form>
+   </body> 
+<html> 

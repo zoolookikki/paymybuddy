@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity // Active Spring Security et applique une configuration personnalisée.
@@ -41,6 +42,8 @@ public class SpringSecurityConfiguration {
                 Définit qui peut accéder à quelles URLs, en fonction des rôles utilisateurs.
                 */
                 .authorizeHttpRequests(auth -> {
+                    // https://www.tutorialspoint.com/spring_security/spring_security_redirection.htm
+                    auth.requestMatchers("/login").permitAll();
                     /*
                     Seuls les utilisateurs ayant le rôle ADMIN peuvent accéder à /admin.
                     Un ADMIN peut accéder à /admin, mais pas à /user.
@@ -59,17 +62,37 @@ public class SpringSecurityConfiguration {
                     */
                     auth.anyRequest().authenticated();
                 })
-                // Active l'authentification par formulaire avec les paramètres par défaut.
+                
+                // Active l'authentification par formulaire avec les paramètres par défaut (formulaires par défaut).
+//              .formLogin(Customizer.withDefaults()) 
+//              .logout(Customizer.withDefaults())
+                
                 /*
-                Equivalente à : 
-                    .formLogin(login -> login
-                    .loginPage("/login") // Page de connexion (si personnalisée)
-                    .permitAll() // Tout le monde peut y accéder
-                Si loginPage("/login") n'est pas spécifié, Spring Security affiche son propre formulaire par défaut.                    
+                Personnalisation pour avoir 2 tableaux de bord différents pour admin et user.
+                https://www.tutorialspoint.com/spring_security/spring_security_redirection.htm
                 */
-                .formLogin(Customizer.withDefaults()) 
-                // idem logout par défaut.
-                .logout(Customizer.withDefaults()) 
+                // Pages de connexion/déconnexion personnalisées.
+                .formLogin(form -> form.loginPage("/login") 
+                        .failureUrl("/login?error=true")
+                        // permet de définir un gestionnaire personnalisé qui sera exécuté après une connexion réussie afin de rediriger dynamiquement l'utilisateur selon son rôle.
+                        .successHandler(authenticationSuccessHandler())
+                        // Tout le monde peut y accéder
+                        .permitAll()
+                )       
+                .logout(logout -> logout
+                        // URL pour se déconnecter
+                        .logoutUrl("/logout") 
+                        // Redirige vers la page de login après la déconnexion
+                        .logoutSuccessUrl("/login?logout")
+                        // Invalide la session
+                        .invalidateHttpSession(true)
+                        // Supprime le cookie de session
+                        .deleteCookies("JSESSIONID")
+                        // Tout le monde peut y accéder                        
+                        .permitAll() 
+                )
+                
+                
                 // Construit et applique la configuration de sécurité.
                 .build();
     }
@@ -109,4 +132,10 @@ public class SpringSecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    // permet de personnaliser ce qui se passe après une connexion réussie.
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+       return new AuthenticationHandler();
+    }    
+    
 }
