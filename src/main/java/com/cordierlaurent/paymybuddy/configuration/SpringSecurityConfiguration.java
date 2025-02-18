@@ -1,0 +1,112 @@
+package com.cordierlaurent.paymybuddy.configuration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity // Active Spring Security et applique une configuration personnalisée.
+public class SpringSecurityConfiguration {
+
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    /*
+    @Bean est automatiquement détecté et exécuté par Spring lors du démarrage de l’application ==>
+    Dans le démarrage de Spring Security, Spring cherche une configuration personnalisée.
+    Il regarde dans le contexte Spring s’il y a un @Bean de type SecurityFilterChain.
+    S’il en trouve un, il l’applique.
+    S’il n’en trouve pas, il applique une configuration de sécurité par défaut (tout est protégé).
+   */
+    @Bean
+    // SecurityFilterChain => un ensemble de règles de sécurité : collection de filtres de sécurité.
+    /*
+     HttpSecurity => permet de définir :
+         - Qui peut accéder à quelles routes (authorizeHttpRequests())
+         - Comment s’authentifier (formLogin(), httpBasic(), etc.)
+         - Comment se déconnecter (logout())
+         - Gestion des sessions (sessionManagement())
+    */
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                /*
+                Permet de configurer les autorisations d'accès aux différentes routes.
+                Définit qui peut accéder à quelles URLs, en fonction des rôles utilisateurs.
+                */
+                .authorizeHttpRequests(auth -> {
+                    /*
+                    Seuls les utilisateurs ayant le rôle ADMIN peuvent accéder à /admin.
+                    Un ADMIN peut accéder à /admin, mais pas à /user.
+                    ** protège toute l'interface admin et ses sous-pages.
+                    */
+                    auth.requestMatchers("/admin/**").hasRole("ADMIN");
+                    /*
+                    Seuls les utilisateurs ayant le rôle USER peuvent accéder à /user.
+                    Un USER peut accéder à /user, mais pas à /admin.
+                    ** protège toute l'interface user et ses sous-pages.
+                    */
+                    auth.requestMatchers("/user/**").hasRole("USER");
+                    /*
+                    Toute autre requête nécessite une connexion, mais sans restriction de rôle spécifique.
+                    Un utilisateur sans connexion sera redirigé vers la page de login.
+                    */
+                    auth.anyRequest().authenticated();
+                })
+                // Active l'authentification par formulaire avec les paramètres par défaut.
+                /*
+                Equivalente à : 
+                    .formLogin(login -> login
+                    .loginPage("/login") // Page de connexion (si personnalisée)
+                    .permitAll() // Tout le monde peut y accéder
+                Si loginPage("/login") n'est pas spécifié, Spring Security affiche son propre formulaire par défaut.                    
+                */
+                .formLogin(Customizer.withDefaults()) 
+                // idem logout par défaut.
+                .logout(Customizer.withDefaults()) 
+                // Construit et applique la configuration de sécurité.
+                .build();
+    }
+
+    /*
+    Cette méthode permet d’indiquer à Spring Security d’utiliser la classe CustomUserDetailsService pour authentifier des utilisateurs
+    Cette méthode définit un AuthenticationManager personnalisé dans Spring Security
+    Un AuthenticationManager est le composant principal qui gère l’authentification des utilisateurs en validant leur nom d’utilisateur et leur mot de passe.
+    Spring utilisera ce AuthenticationManager pour l’authentification des utilisateurs.
+        HttpSecurity http : Permet d’accéder aux objets de configuration de sécurité Spring
+        BCryptPasswordEncoder bCryptPasswordEncoder : Utilisé pour vérifier les mots de passe hashés stockés en base de données.
+    */
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
+        // Récupère un AuthenticationManagerBuilder à partir de l’objet HttpSecurity => Récupère l'objet pour construire l’authentification.
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        /*
+        Définit la source des utilisateurs (UserDetailsService) et l’encodeur de mot de passe (BCrypt).
+        Utilise CustomUserDetailsService pour charger les utilisateurs depuis la base de données.
+            - userDetailsService(customUserDetailsService)
+                customUserDetailsService est une classe qui implémente UserDetailsService.
+                Cela signifie que l’authentification se fait en consultant la base de données.
+            - passwordEncoder(bCryptPasswordEncoder)
+                Vérifie que le mot de passe fourni par l’utilisateur correspond à celui hashé en base.
+                Spring Security compare le hash du mot de passe entré avec celui stocké en base.
+        */
+        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
+        /*
+        Construit l’objet AuthenticationManager et le retourne.
+        Ce AuthenticationManager sera utilisé par Spring Security pour authentifier les utilisateurs.
+        */
+        return authenticationManagerBuilder.build();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+}
