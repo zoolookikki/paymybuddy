@@ -2,7 +2,6 @@ package com.cordierlaurent.paymybuddy.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 // @RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
 // @Controller pour renvoyer une vue HTML en utilisant Thymeleaf (ou un autre moteur de template).

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,7 +41,7 @@ public class SpringSecurityConfiguration {
                 Définit qui peut accéder à quelles URLs, en fonction des rôles utilisateurs.
                 */
                 .authorizeHttpRequests(auth -> {
-                    // https://www.tutorialspoint.com/spring_security/spring_security_redirection.htm
+                    // permet à tout le monde d'accéder à la page de login (/login), sans authentification requise.
                     auth.requestMatchers("/login").permitAll();
                     /*
                     Seuls les utilisateurs ayant le rôle ADMIN peuvent accéder à /admin.
