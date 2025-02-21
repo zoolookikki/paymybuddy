@@ -1,6 +1,5 @@
 package com.cordierlaurent.paymybuddy.model;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
@@ -23,28 +22,26 @@ Non utilisation de @Data car génère equals() et hashCode(), ce qui peut être 
     @Getter + @Setter + @NoArgsConstructor + @AllArgsConstructor
 */
 @Entity
-@Table(name = "users")
+@Table(name = "connections")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-// important pour afficher le contenu des objets simplement avec log4j2.
+//important pour afficher le contenu des objets simplement avec log4j2.
 @ToString
-public class User {
-    
-    // contructeur utilisé pour les tests d'intégration.s
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
+public class Connection {
     // Indique que id est la clé primaire.
     @Id
     // Indique que la valeur de la clé primaire est générée automatiquement par la base de données, en utilisant une auto-incrémentation.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;  
+
+    @Column(name = "friend_id", nullable = false)
+    private Long friendId; 
+    
     /*
     la base de données gère le timestamp => indiqué dans le schema :
     insertable = false => exclut la colonne lors d'une insertion.
@@ -53,19 +50,4 @@ public class User {
     @Column(nullable = false, insertable = false, updatable = false)
     private Timestamp createdAt;
 
-    @Column(nullable = false, length = 20)
-    private String role = "USER"; 
-
-    @Column(nullable = false, length = 100)
-    private String name;
-
-    // unique = true garantit qu’aucun utilisateur ne peut avoir le même email.
-    @Column(nullable = false, unique = true, length = 255)
-    private String email;
-
-    @Column(nullable = false, length = 255)
-    private String password;
-
-    @Column(nullable = false, precision = 8, scale = 2)
-    private BigDecimal balance = BigDecimal.ZERO; 
 }

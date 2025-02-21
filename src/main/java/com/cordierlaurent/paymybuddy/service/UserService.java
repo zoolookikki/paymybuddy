@@ -19,7 +19,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public boolean register(User user) {
+    public boolean add(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return false; // this email exists.
         }

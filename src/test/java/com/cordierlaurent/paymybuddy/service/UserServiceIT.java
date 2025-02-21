@@ -1,9 +1,6 @@
 package com.cordierlaurent.paymybuddy.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.cordierlaurent.paymybuddy.model.User;
@@ -55,13 +51,10 @@ public class UserServiceIT {
     @Order(1)
     void registerUserSuccessTest() {
         // given
-        userTest = new User();
-        userTest.setName("John");
-        userTest.setEmail("john@test.com");
-        userTest.setPassword("John");
+        userTest = new User("John", "john@test.com", "John");
 
         // when
-        boolean isRegistered = userService.register(userTest);
+        boolean isRegistered = userService.add(userTest);
         
         // then
         assertThat(isRegistered).isTrue();
