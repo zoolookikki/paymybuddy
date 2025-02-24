@@ -76,7 +76,7 @@ public class ConnectionServiceIT {
     
     @Test
     @Order(1)
-    void addYourselfTest() {
+    void addYourselfFailTest() {
         // when
         Result result = connectionService.add(user, user);
         log.debug("addYourselfTest,result="+result);

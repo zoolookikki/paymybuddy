@@ -21,7 +21,7 @@ public class ConnectionService {
     
     public Result add(User user, User friend) {
         if (user == null || friend == null) {
-            throw new IllegalArgumentException("invalid argument");
+            throw new IllegalArgumentException("User and friend must not be null");
         }        
         
         log.debug("ConnectionService.add,userId="+user.getId()+",friendId="+friend.getId());
