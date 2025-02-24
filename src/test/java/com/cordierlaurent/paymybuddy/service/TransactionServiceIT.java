@@ -61,8 +61,9 @@ public class TransactionServiceIT {
     private User friend;
     private User other;
 
-    private User createUser(String name, String email, String password) {
+    private User createUser(String name, String email, String password, BigDecimal amount) {
         User userToCreate = new User(name, email, password);
+        userToCreate.setBalance(amount);
         userService.add(userToCreate);
         // pour récupérer le user (avec son id autoincrémenté).
         return userRepository.findByEmail(userToCreate.getEmail()).orElseThrow();
@@ -80,12 +81,11 @@ public class TransactionServiceIT {
         connectionRepository.deleteAll();
         userRepository.deleteAll();
 
-        user = createUser("User", "user@test.com", "User");
-        user.setBalance(BigDecimal.TWO);
+        user = createUser("User", "user@test.com", "User", BigDecimal.TWO);
         log.debug("user="+user);
-        friend = createUser("Friend", "friend@test.com", "Friend");
+        friend = createUser("Friend", "friend@test.com", "Friend", BigDecimal.ZERO);
         log.debug("friend="+friend);
-        other = createUser("Other", "other@test.com", "Other");
+        other = createUser("Other", "other@test.com", "Other", BigDecimal.TEN);
         log.debug("other="+friend);
         Result result = connectionService.add(user, friend);
         log.debug("result="+result);

@@ -39,6 +39,7 @@ public class ConnectionService {
         connectionRepository.save(connection);
 
         // optionnel : ajout de la relation inverse (friend vers user)
+        // ATTENTION SI MISE EN ROUTE ==> IL FAUT FAIRE UN @Transactional sur cette fonction.
         /*
         Connection reverseConnection = new Connection();
         connection.setUserId(friend.getId());

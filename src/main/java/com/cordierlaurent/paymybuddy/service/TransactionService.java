@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cordierlaurent.paymybuddy.model.Transaction;
 import com.cordierlaurent.paymybuddy.model.User;
@@ -28,6 +29,8 @@ public class TransactionService {
     @Autowired
     private ConnectionRepository connectionRepository;
 
+    // Rollback automatique si une erreur se produit (simplifie énormément le code => voir TransactionTemplate (alternative Spring Boot) ou EntityManager (niveau le plus bas).
+    @Transactional
     public Result addTransaction(User sender, User receiver, String description, BigDecimal amount) {
         if (sender == null || receiver == null) {
             throw new IllegalArgumentException("Sender and receiver must not be null");
@@ -63,6 +66,13 @@ public class TransactionService {
         // sauvegarde dans la base de données : d'abord la transaction. 
         transactionRepository.save(transaction);
         userRepository.save(sender);
+        // pour tester @Transactional
+/*
+
+        if (true) { 
+            throw new RuntimeException("Test @Transactional");
+        }
+*/        
         userRepository.save(receiver);
         
         return new Result (true, "Successful transaction");
