@@ -9,16 +9,31 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.repository.UserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
 @SpringBootTest
+//Permet de charger automatiquement application-test.properties.
+@ActiveProfiles("test") 
+//Empêche Spring de forcer H2.
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+/*
+JUnit crée une seule instance de la classe de test pour toutes les méthodes de test.
+@BeforeAll et @AfterAll n'ont plus besoin d'être static !!!
+*/
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
+@Log4j2
 public class UserServiceIT {
 
     @Autowired
@@ -33,18 +48,9 @@ public class UserServiceIT {
     private static User userTest;
     private static Long userIdTest;
 
-    /*
-    Injection du UserRepository en paramètre avec @Autowired => permet de contourner la limitation statique :
-        - @BeforeAll est une fonction statique qui si on utilise un attribut partagé (ici userRepository), nécessite d'être déclaré en statique.
-        - Mais les champs injectés avec @Autowired ne peuvent pas être statiques, car Spring injecte des beans dans des instances, pas dans des classes statiques.
-    */
     @BeforeAll
-    static void setup(@Autowired UserRepository userRepository) {
-        // suppression de l'utilisateur de test si il existe.
-        Optional<User> user = userRepository.findByEmail("john@test.com");
-        if (user.isPresent()) {
-            userRepository.delete(user.get());
-        }
+    void setup() {
+        userRepository.deleteAll();
     }
 
     @Test
