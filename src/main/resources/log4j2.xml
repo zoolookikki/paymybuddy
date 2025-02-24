@@ -9,5 +9,9 @@
         <Root level="info">
             <AppenderRef ref="Console" />
         </Root>
+        <!-- Hibernate : pour afficher les parametres de la requete sql -->
+        <Logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
     </Loggers>
 </Configuration>
