@@ -1,17 +1,33 @@
-<!DOCTYPE html> 
-<html xmlns="http://www.w3.org/1999/xhtml" 
-   xmlns:th="https://www.thymeleaf.org" 
-   xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"> 
-   <head> 
-      <title>
-         Hello Admin!
-      </title> 
-   </head>
-   <body> 
-      <p>Admin Console</p>
-      <h1 th:inline="text">Welcome <span sec:authentication="name"></span>!</h1> 
-	  <form th:action="@{/logout}" method="post">
-	      <button type="submit">Sign Out</button>
-	  </form>
-   </body> 
-<html> 
+<!DOCTYPE html>
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Pay My Buddy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container-fluid p-3">
+        <img th:src="@{/images/logo.png}" alt="Logo" height="80" class="ms-3">
+    </div>
+    
+    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
+        <div class="container">
+            <a href="#" class="btn btn-outline-secondary">Voir tous les utilisateurs</a>
+            <a href="#" class="btn btn-outline-secondary">Modifier un utilisateur</a>
+            <a href="#" class="btn btn-outline-secondary">Supprimer un utilisateur</a>
+            <a href="#" class="btn btn-outline-secondary">Transactions</a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger">Se déconnecter</button>
+            </form>
+        </div>
+    </nav>
+    
+    <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+        <h1 class="text-center">Tableau de bord de l'administrateur</h1>
+        <h2 class="text-center" th:inline="text">Bienvenue <span sec:authentication="name"></span>!</h2>
+    </div>
+</body>
+</html>

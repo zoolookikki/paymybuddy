@@ -41,6 +41,8 @@ public class SpringSecurityConfiguration {
                 Définit qui peut accéder à quelles URLs, en fonction des rôles utilisateurs.
                 */
                 .authorizeHttpRequests(auth -> {
+                    // Autoriser les fichiers statiques : sinon le logo ne s'affichait pas sur la page de login.
+                    auth.requestMatchers("/images/**", "/css/**", "/js/**").permitAll();
                     // permet à tout le monde d'accéder à la page de login (/login), sans authentification requise.
                     auth.requestMatchers("/login").permitAll();
                     /*
