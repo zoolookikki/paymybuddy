@@ -43,8 +43,8 @@ public class SpringSecurityConfiguration {
                 .authorizeHttpRequests(auth -> {
                     // Autoriser les fichiers statiques : sinon le logo ne s'affichait pas sur la page de login.
                     auth.requestMatchers("/images/**", "/css/**", "/js/**").permitAll();
-                    // permet à tout le monde d'accéder à la page de login (/login), sans authentification requise.
-                    auth.requestMatchers("/login").permitAll();
+                    // Autoriser l'accès à la page de login et d'inscription sans authentification.
+                    auth.requestMatchers("/login", "/register").permitAll();
                     /*
                     Seuls les utilisateurs ayant le rôle ADMIN peuvent accéder à /admin.
                     Un ADMIN peut accéder à /admin, mais pas à /user.

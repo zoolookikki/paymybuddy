@@ -47,7 +47,7 @@ public class ConnectionService {
         connectionRepository.save(reverseConnection);
         */
 
-        return new Result(true,"The user has been added");
+        return new Result(true,"Your friend is registered");
     }
     
     public List<Connection> getConnections(Long userId) {

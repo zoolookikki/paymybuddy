@@ -14,6 +14,8 @@ Spring le détecte automatiquement et crée un bean sans configuration suppléme
 //@Repository
 //C'est un DAO (Data Access Object) qui permet de récupérer les utilisateurs en base de données.
 public interface UserRepository extends JpaRepository<User, Long> {
+    // Spring Data génère automatiquement la requête : SELECT * FROM users WHERE name = ?
+    Optional<User> findByName(String name);
     // Spring Data génère automatiquement la requête : SELECT * FROM users WHERE email = ?
     Optional<User> findByEmail(String email);
     // Spring Data génère automatiquement la requête : SELECT * FROM users WHERE role = ?

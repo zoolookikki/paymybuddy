@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Pay My Buddy</title>
+    <title>Inscription - Pay My Buddy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column vh-100 bg-light">
@@ -14,17 +14,18 @@
     </div>
     <div class="d-flex flex-grow-1 justify-content-center align-items-center">
         <div class="container p-4 bg-white shadow rounded text-center" style="max-width: 350px;">
-            <h2 class="mb-4">Connexion</h2>
-            <div th:if="${param.error}" class="alert alert-danger">Identifiants incorrects</div>
-            <div th:if="${param.logout}" class="alert alert-success">Vous avez été déconnecté.</div>
+            <h2 class="mb-4">Inscription</h2>
             <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
             <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-            <form th:action="@{/login}" method="post">
-                <input type="text" name="username" class="form-control mb-3" placeholder="Mail" required>
-                <input type="password" name="password" class="form-control mb-3" placeholder="Mot de passe" required>
-                <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+            <!-- th:object="${objet}" associe le formulaire à un objet qui est envoyé depuis le contrôleur Spring => lorsqu'on fera le submit, 
+            les attributs de l'ojbet user seront automatiquement remplis pour le controleur qui fait le postmapping -->
+            <form th:action="@{/register}" th:object="${user}" method="post">
+                <input type="text" th:field="*{name}" class="form-control mb-3" placeholder="Nom" required>
+                <input type="email" th:field="*{email}" class="form-control mb-3" placeholder="Email" required>
+                <input type="password" th:field="*{password}" class="form-control mb-3" placeholder="Mot de passe" required>
+                <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
             </form>
-            <a th:href="@{/register}" class="d-block mt-3">S'inscrire</a>
+            <a th:href="@{/login}" class="d-block mt-3">Se connecter</a>
         </div>
     </div>
 </body>

@@ -10,7 +10,7 @@
 <body class="bg-light">
     <div class="container-fluid p-3">
         <img th:src="@{/images/logo.png}" alt="Logo" height="80" class="ms-3">
-		<span th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'dd MMMM yyyy HH:mm')}"></span>
+        <span th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'dd MMMM yyyy HH:mm')}"></span>
     </div>
 
     <nav class="navbar navbar-light bg-white shadow-sm mb-4">
@@ -23,9 +23,9 @@
         <h2 class="mb-4">Historique des Transactions</h2>
         <table class="table table-striped">
             <thead>
-				<tr th:if="${transactions.empty}">
-					<td>Aucune transaction à afficher</td>
-				</tr>
+                <tr th:if="${transactions.empty}">
+                    <td>Aucune transaction à afficher</td>
+                </tr>
                 <tr>
                     <th>Date</th>
                     <th>Emetteur</th>
@@ -36,7 +36,7 @@
             </thead>
             <tbody>
                 <tr th:each="transaction : ${transactions}">
-					<td th:text="${#dates.format(transaction.createdAt, 'EEEE dd MMMM yyyy HH:mm:ss')}"></td>
+                    <td th:text="${#dates.format(transaction.createdAt, 'EEEE dd MMMM yyyy HH:mm:ss')}"></td>
                     <td th:text="${transaction.senderId}"></td>
                     <td th:text="${transaction.receiverId}"></td>
                     <td th:text="${transaction.description}"></td>

@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.repository.UserRepository;
+import com.cordierlaurent.paymybuddy.util.Result;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -60,10 +61,11 @@ public class UserServiceIT {
         userTest = new User("John", "john@test.com", "John");
 
         // when
-        boolean isRegistered = userService.add(userTest);
+        Result result = userService.add(userTest);
+        log.debug("registerUserSuccessTest,result="+result);
         
         // then
-        assertThat(isRegistered).isTrue();
+        assertThat(result.isSuccess()).isTrue();
         Optional<User> savedUser = userRepository.findByEmail(userTest.getEmail());
         assertThat(savedUser).isPresent();
         

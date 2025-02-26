@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.repository.UserRepository;
+import com.cordierlaurent.paymybuddy.util.Result;
+
+import lombok.extern.log4j.Log4j2;
 
 @Service
+@Log4j2
 public class UserService {
 
     @Autowired
@@ -19,13 +23,17 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public boolean add(User user) {
+    public Result add(User user) {
+        log.debug("add,user="+user);
+        if (userRepository.findByName(user.getName()).isPresent()) {
+            return new Result(false, "Ce nom est déjà utilisé"); 
+        }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            return false; // this email exists.
+            return new Result(false, "Cet e-mail a déjà été enregistré"); 
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return true;
+        return new Result(true,"Votre inscription a réussi");
     }
     
     public List<User> getByRole(String role) {
