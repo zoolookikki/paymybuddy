@@ -19,6 +19,7 @@
             <div th:if="${param.logout}" class="alert alert-success">Vous avez été déconnecté.</div>
             <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
             <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+            <div th:if="${param.emailChanged}" class="alert alert-info">Votre email a été modifié. Veuillez vous reconnecter.</div>
             <form th:action="@{/login}" method="post">
                 <input type="text" name="username" class="form-control mb-3" placeholder="Mail" required>
                 <input type="password" name="password" class="form-control mb-3" placeholder="Mot de passe" required>

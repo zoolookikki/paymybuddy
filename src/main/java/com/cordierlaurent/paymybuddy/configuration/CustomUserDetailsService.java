@@ -38,11 +38,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     // Fonction à implémenter utilisée par Spring Security pour charger un utilisateur.
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        log.debug("Recherche de l'utilisateur par email = {}", email);
-        User user = userRepository.findByEmail(email)
+        // e-mail toujours en minuscule.
+        String normalizedEmail = email.trim().toLowerCase();
+        log.debug("Recherche de l'utilisateur par email = {}", normalizedEmail);
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> {
                     log.debug("Aucun utilisateur trouvé");
-                    return new UsernameNotFoundException("User not found with email: " + email);
+                    return new UsernameNotFoundException("User not found with email: " + normalizedEmail);
                 });
         log.debug("Utilisateur trouvé : {}", user);
 
