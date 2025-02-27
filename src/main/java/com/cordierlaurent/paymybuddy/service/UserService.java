@@ -25,21 +25,56 @@ public class UserService {
 
     public Result add(User user) {
         log.debug("add,user="+user);
+        
+        // cas impossibles car required sur le formulaire d'inscription mais par sécurité.
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
+            return new Result(false, "Le nom est requis");
+        }
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            return new Result(false, "L'email est requis");
+        }
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            return new Result(false, "Le mot de passe est requis");
+        }
+
+        
+        if (!user.getName().matches("^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$")) {
+            return new Result(false, "Le nom ne doit contenir que des lettres, chiffres, espaces ou tirets");
+        }
         if (userRepository.findByName(user.getName()).isPresent()) {
             return new Result(false, "Ce nom est déjà utilisé"); 
+        }
+        
+        // normalement déjà contrôlé par le type=email sur le formulaire.
+        if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
+            return new Result(false, "Format d'email invalide.");
         }
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return new Result(false, "Cet e-mail a déjà été enregistré"); 
         }
+        
+        if (!user.getPassword().matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$")) {
+            return new Result(false, "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial");
+        }
+  
+        // e-mail toujours en minuscule
+        user.setEmail(user.getEmail().trim().toLowerCase());
+        // encodage du mot de passe.
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        
         userRepository.save(user);
+        
         return new Result(true,"Votre inscription a réussi");
     }
     
     public List<User> getByRole(String role) {
         return userRepository.findByRole(role);
     }
-
+    
+    public Optional<User> getByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+    
     public boolean update(Long id, User userToUpdate) {
         Optional<User> userFound = userRepository.findById(id);
         if (userFound.isPresent()) {

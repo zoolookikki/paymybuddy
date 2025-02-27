@@ -15,9 +15,9 @@
     
     <nav class="navbar navbar-light bg-white shadow-sm mb-4">
         <div class="container">
-            <a href="#" class="btn btn-outline-secondary">Transférer</a>
-            <a href="#" class="btn btn-outline-secondary">Profil</a>
-            <a href="#" class="btn btn-outline-secondary">Ajouter Relation</a>
+            <a th:href="@{/transfer}" class="btn btn-outline-secondary">Transférer</a>
+            <a th:href="@{/profile}" class="btn btn-outline-secondary">Profil</a>
+            <a th:href="@{/connection}" class="btn btn-outline-secondary">Ajouter Relation</a>
             <form th:action="@{/logout}" method="post" class="d-inline">
                 <button type="submit" class="btn btn-outline-danger">Se déconnecter</button>
             </form>
