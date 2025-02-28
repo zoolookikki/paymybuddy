@@ -21,7 +21,7 @@
             les attributs de l'ojbet user seront automatiquement remplis pour le controleur qui fait le postmapping -->
             <form th:action="@{/register}" th:object="${user}" method="post">
                 <input type="text" th:field="*{name}" class="form-control mb-3" placeholder="Nom" required>
-                <input type="email" th:field="*{email}" class="form-control mb-3" placeholder="Email" required>
+                <input type="email" th:field="*{email}" class="form-control mb-3" placeholder="E-mail" required>
                 <input type="password" th:field="*{password}" class="form-control mb-3" placeholder="Mot de passe" required>
                 <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
             </form>

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cordierlaurent.paymybuddy.exception.CurrentUserNotFoundException;
+import com.cordierlaurent.paymybuddy.exception.UserNotFoundException;
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.repository.UserRepository;
 import com.cordierlaurent.paymybuddy.util.Result;
@@ -25,16 +25,19 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    // méthode qui renvoit si elle fonctionne l'utilisateur courant (sauf erreur interne grave).
+    // méthode qui renvoit si elle fonctionne l'utilisateur courant (sinon c'est une erreur interne grave).
     public User getAuthenticatedUser(Principal principal) {
+        // tests exceptions.
+//        throw new IllegalArgumentException("ILLEGAL");
+//        throw new UserNotFoundException("USERNOTFOUND");
         return userRepository.findByEmail(principal.getName())
-                .orElseThrow(() -> new CurrentUserNotFoundException("Erreur interne : utilisateur non trouvé"));
+                .orElseThrow(() -> new UserNotFoundException("Internal error : getAuthenticatedUser ; "+principal.getName()));
     }
     
     private Result userValidation(User user, boolean isUpdate, User currentUser) {
         log.debug("userValidation,user="+user+",isUpdate="+isUpdate+",currentUser="+currentUser);
         if (isUpdate && currentUser == null)
-            throw new CurrentUserNotFoundException("Erreur interne : validation impossible");
+            throw new IllegalArgumentException("Internal error : userValidation");
         
         // cas impossibles car required sur le formulaire d'inscription mais par sécurité.
         if (user.getName() == null || user.getName().trim().isEmpty()) {
@@ -132,6 +135,11 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    // méthode qui renvoit si elle fonctionne l'utilisateur demandé (sinon c'est une erreur interne grave).
+    public User getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Internal error: getById : " + id));
+    }
 
     // Anciennes fonctions à garder pour le moment.
     public boolean update(Long id, User userToUpdate) {

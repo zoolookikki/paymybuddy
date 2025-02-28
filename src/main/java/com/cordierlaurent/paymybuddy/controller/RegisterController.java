@@ -36,7 +36,9 @@ public class RegisterController {
     // Model permet de transmettre des données de la couche serveur (Java) vers la vue (Thymeleaf).
     public String registerUser(@ModelAttribute User user, Model model) {
         log.debug("PostMapping/register");
+        
         Result result = userService.add(user);
+        
         if (result.isSuccess()) {
             model.addAttribute("successMessage", result.getMessage());
             return "login";

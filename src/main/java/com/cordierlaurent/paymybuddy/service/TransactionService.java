@@ -1,12 +1,16 @@
 package com.cordierlaurent.paymybuddy.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cordierlaurent.paymybuddy.dto.TransactionDTO;
+import com.cordierlaurent.paymybuddy.exception.TransactionException;
+import com.cordierlaurent.paymybuddy.exception.UserNotFoundException;
 import com.cordierlaurent.paymybuddy.model.Transaction;
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.repository.ConnectionRepository;
@@ -32,6 +36,7 @@ public class TransactionService {
     // Rollback automatique si une erreur se produit (simplifie énormément le code => voir TransactionTemplate (alternative Spring Boot) ou EntityManager (niveau le plus bas).
     @Transactional
     public Result addTransaction(User sender, User receiver, String description, BigDecimal amount) {
+        // erreurs normalement contrôlées par le formulaire.
         if (sender == null || receiver == null) {
             throw new IllegalArgumentException("Sender and receiver must not be null");
         }
@@ -42,14 +47,17 @@ public class TransactionService {
             throw new IllegalArgumentException("Amount must be greater than zero");
         }
         
+        // erreurs de logique de programmation.
         if (sender.getId().equals(receiver.getId())) {
-            return new Result(false, "You cannot transfer money to yourself"); 
+            throw new TransactionException("Internal error : addTransaction : senderId = receiverId");
         }
         if (!connectionRepository.existsByUserIdAndFriendId(sender.getId(), receiver.getId())) {
-            return new Result (false, "You can only send money to your friends");
-        }        
+            throw new TransactionException("Internal error : addTransaction : connection error : "+sender.getId()+ " "+receiver.getId());
+        }   
+        
+        // erreur utilisateur.
         if (sender.getBalance().compareTo(amount) < 0) {
-            return new Result(false, "Your balance is insufficient to complete this transaction"); 
+            return new Result(false, "Votre solde est insufisant"); 
         }
 
         // sauvegarde de la transaction.
@@ -68,19 +76,36 @@ public class TransactionService {
         userRepository.save(sender);
         // pour tester @Transactional
 /*
-
         if (true) { 
             throw new RuntimeException("Test @Transactional");
         }
 */        
         userRepository.save(receiver);
         
-        return new Result (true, "Successful transaction");
+        return new Result (true, "La transaction a été effectuée");
     }
     
-    public List<Transaction> getUserTransactions(Long userId) {
-        return transactionRepository.findBySenderIdOrderByCreatedAtDesc(userId);
+    public List<TransactionDTO> getUserTransactions(Long userId) {
+        List<Transaction> transactions = transactionRepository.findBySenderIdOrderByCreatedAtDesc(userId);
+        List<TransactionDTO> transactionDTOs = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            // Trouver l'ami (receiver)
+            User friend = userRepository.findById(transaction.getReceiverId())
+                    .orElseThrow(() -> new UserNotFoundException("Internal error : getUserTransactions : "+transaction.getReceiverId()));
+
+            TransactionDTO dto = new TransactionDTO(
+                transaction.getCreatedAt(),
+                friend.getName(),
+                transaction.getDescription(),
+                transaction.getAmount()
+            );
+
+            transactionDTOs.add(dto);
+        }
+        return transactionDTOs;
     }
+    
     
     // pour Admin.
     public List<Transaction> getAllTransactions() {

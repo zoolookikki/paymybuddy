@@ -11,15 +11,30 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(CurrentUserNotFoundException.class)
-    public String handleUserNotFoundException(HttpServletRequest request, Model model, CurrentUserNotFoundException e) {
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleUserNotFoundException(HttpServletRequest request, Model model, UserNotFoundException e) {
+        log.error("UserNotFoundException interception : {}", e.getMessage());
         // pour l'instant je laisse suite à différents tests mais je ne pense plus que ce soit utile car la redirection /logout buggue.
         if (request.getRequestURI().equals("/logout")) {
-            log.debug("Ignorer CurrentUserNotFoundException car on est sur /logout");
+            log.debug("Ignorer UserNotFoundException car on est sur /logout");
             throw e; // Laisse Spring Security gérer l'erreur (redirigera vers /login)
         }
-        log.debug("Interception de CurrentUserNotFoundException : {}", e.getMessage());
-        model.addAttribute("errorMessage", e.getMessage()); // Ajoute le message d'erreur à la vue
-        return "error"; // Affiche error.html
+        model.addAttribute("errorMessage", e.getMessage()); 
+        return "myerror"; 
     }
+    
+    @ExceptionHandler(TransactionException.class)
+    public String handleTransactionException(Model model, TransactionException e) {
+        log.error("TransactionException interception : {}", e.getMessage());
+        model.addAttribute("errorMessage", e.getMessage()); 
+        return "myerror"; 
+    }
+    
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String handleIllegalArgumentException(Model model, IllegalArgumentException e) {
+        log.error("IllegalArgumentException interception : {}", e.getMessage());
+        model.addAttribute("errorMessage", e.getMessage()); 
+        return "myerror"; 
+    }
+    
 }

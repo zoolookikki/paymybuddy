@@ -13,7 +13,7 @@ import com.cordierlaurent.paymybuddy.service.TransactionService;
 //@RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
 //@Controller pour renvoyer une vue HTML en utilisant Thymeleaf (ou un autre moteur de template).
 @Controller
-public class TransactionController {
+public class AdminController {
 
     @Autowired 
     TransactionService transactionService;
