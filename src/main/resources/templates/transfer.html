@@ -12,18 +12,8 @@
         <img th:src="@{/images/logo.png}" alt="Logo" height="80" class="ms-3">
     </div>
 
-    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
-        <div class="container">
-            <a th:href="@{/transfer}" class="btn btn-primary">Transférer</a>
-            <a th:href="@{/profile}" class="btn btn-outline-secondary">Profil</a>
-            <a th:href="@{/connection}" class="btn btn-outline-secondary">Ajouter Relation</a>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger">Se déconnecter</button>
-            </form>
-        </div>
-    </nav>
-    
-  
+    <div th:replace="fragments/navbar :: navbar('transfer')"></div>
+
     <div class="container bg-white p-4 shadow rounded" style="max-width: 400px;">
         <h2 class="mb-4">Transfert</h2>
         <p><strong>Solde disponible :</strong> <span th:text="${user.balance}"></span></p>

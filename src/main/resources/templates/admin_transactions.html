@@ -13,11 +13,7 @@
         <span th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'dd MMMM yyyy HH:mm')}"></span>
     </div>
 
-    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
-        <div class="container">
-            <a href="/admin" class="btn btn-outline-secondary">Retour</a>
-        </div>
-    </nav>
+    <div th:replace="fragments/navbar :: navbar('transactions')"></div>
 
     <div class="container bg-white p-4 shadow rounded">
         <h2 class="mb-4">Historique des Transactions</h2>

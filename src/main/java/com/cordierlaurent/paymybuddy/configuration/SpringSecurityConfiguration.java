@@ -57,6 +57,8 @@ public class SpringSecurityConfiguration {
                     ** protège toute l'interface user et ses sous-pages.
                     */
                     auth.requestMatchers("/user/**").hasRole("USER");
+                    // ajout pour l'exemple : j'ai interdit la modification de profile pour l'administrateur (il n'est pas affiché dans la navbar.html si ADMIN)
+                    auth.requestMatchers("/profile").hasRole("USER");
                     /*
                     Toute autre requête nécessite une connexion, mais sans restriction de rôle spécifique.
                     Un utilisateur sans connexion sera redirigé vers la page de login.

@@ -1,0 +1,29 @@
+<div th:fragment="navbar(activePage)">
+    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
+        <div class="container d-flex justify-content-end gap-3 w-100">
+            <div class="d-flex gap-3">            
+                <!-- @{...} Génère dynamiquement l'URL complète (chemain absolu compris) -->
+                <!-- Accessible à l'administrateur uniquement -->
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="#" class="btn btn-outline-secondary">Voir tous les utilisateurs</a>
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="#" class="btn btn-outline-secondary">Modifier un utilisateur</a>
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" href="#" class="btn btn-outline-secondary">Supprimer un utilisateur</a>
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/admin/transactions}" th:classappend="${activePage == 'transactions' ? 'btn-primary' : 'btn-outline-secondary'}" class="btn">Historique des transactions</a>            
+            
+                <!-- Accessible à tous (utilisateurs et admin) -->
+                <a th:href="@{/transfer}" th:classappend="${activePage == 'transfer' ? 'btn-primary' : 'btn-outline-secondary'}" class="btn">Transférer</a>
+                
+                <!-- Visible uniquement pour les utilisateurs (pas les admins) -->
+                <a th:if="${#authorization.expression('hasRole(''USER'')')}" th:href="@{/profile}" th:classappend="${activePage == 'profile' ? 'btn-primary' : 'btn-outline-secondary'}" class="btn">Profil</a>
+            
+                <!-- Accessible à tous (utilisateurs et admin) -->
+                <a th:href="@{/connection}" th:classappend="${activePage == 'connection' ? 'btn-primary' : 'btn-outline-secondary'}" class="btn">Ajouter Relation</a>
+                
+                <div class="ms-auto"> 
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-outline-danger">Se déconnecter</button>
+                    </form>
+                </div> 
+            </div>
+        </div>
+    </nav>
+</div>

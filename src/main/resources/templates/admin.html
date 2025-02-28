@@ -13,21 +13,10 @@
         <img th:src="@{/images/logo.png}" alt="Logo" height="80" class="ms-3">
         <span th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'dd MMMM yyyy HH:mm')}"></span>
     </div>
+
+    <div th:replace="fragments/navbar :: navbar('admin')"></div>
     
-    <nav class="navbar navbar-light bg-white shadow-sm mb-4">
-        <div class="container">
-            <a href="#" class="btn btn-outline-secondary">Voir tous les utilisateurs</a>
-            <a href="#" class="btn btn-outline-secondary">Modifier un utilisateur</a>
-            <a href="#" class="btn btn-outline-secondary">Supprimer un utilisateur</a>
-            <!-- @{...} Génère dynamiquement l'URL complète (chemain absolu compris) -->
-            <a th:href="@{/admin/transactions}" class="btn btn-outline-secondary">Transactions</a>
-            <form th:action="@{/logout}" method="post" class="d-inline">
-                <button type="submit" class="btn btn-outline-danger">Se déconnecter</button>
-            </form>
-        </div>
-    </nav>
-    
-    <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+    <div class="container d-flex flex-column justify-content-center align-items-center vh-100"> 
         <h1 class="text-center">Tableau de bord de l'administrateur</h1>
         <h2 class="text-center" th:inline="text">Bienvenue <span sec:authentication="name"></span>!</h2>
     </div>
