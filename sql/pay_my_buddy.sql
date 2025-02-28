@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS `pay_my_buddy`.`users` (
   `password` VARCHAR(255) NOT NULL,
   `balance` DECIMAL(8,2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 

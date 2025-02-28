@@ -56,7 +56,8 @@ public class User {
     @Column(nullable = false, length = 20)
     private String role = "USER"; 
 
-    @Column(nullable = false, length = 100)
+    // unique = true garantit qu’aucun utilisateur ne peut avoir le même nom.
+    @Column(nullable = false, unique = true, length = 100)
     private String name;
 
     // unique = true garantit qu’aucun utilisateur ne peut avoir le même email.
