@@ -8,14 +8,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-    <div th:replace="fragments/header :: header(false)"></div>
+    <div th:replace="~{fragments/header :: header(false)}"></div>
 
-    <div th:replace="fragments/navbar :: navbar('transfer')"></div>
+    <div th:replace="~{fragments/navbar :: navbar('transfer')}"></div>
 
     <div class="container bg-white p-4 shadow rounded" style="max-width: 400px;">
         <h2 class="mb-4">Transfert</h2>
         <p><strong>Solde disponible :</strong> <span th:text="${user.balance}"></span></p>
-        <div th:replace="fragments/messages :: messages"></div>
+        <div th:replace="~{fragments/messages :: messages}"></div>
         <form th:action="@{/transfer}" method="post">
             <label for="friendId" class="form-label">Sélectionner une relation</label>
             <select name="friendId" class="form-select mb-3" required autofocus>
@@ -52,7 +52,7 @@
         </table>
     </div>
     
-    <div th:replace="fragments/footer :: footer('transfer')"></div>
+    <div th:replace="~{fragments/footer :: footer('transfer')}"></div>
 
 </body>
 </html>
