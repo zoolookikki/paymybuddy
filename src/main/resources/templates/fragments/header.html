@@ -1,0 +1,6 @@
+<div th:fragment="header(showDate)">
+    <div class="container-fluid p-3">
+        <img th:src="@{/images/logo.png}" alt="Logo Pay My Buddy" height="80" class="ms-3">
+        <span th:if="${showDate}" th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'dd MMMM yyyy HH:mm')}"></span>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+<<div th:fragment="footer(activePage)">
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+
+                    // Empêche Chrome d’ignorer la première pression
+                    event.preventDefault();  
+                    
+                    // Toujours utiliser /*[[ ... ]]*/ pour injecter des valeurs Thymeleaf dans du JavaScript : Thymeleaf évalue dynamiquement l'expression côté serveur et remplace le commentaire par une valeur statique dans le fichier HTML généré
+                    let userRole = /*[[${#authorization.expression('hasRole(''ADMIN'')') ? 'ADMIN' : 'USER'}]]*/ "USER";
+                    escapeRedirect = (userRole === "ADMIN") ? "/admin" : "/user"; 
+                    console.log("Rôle :", userRole, "| Redirection vers :", escapeRedirect);
+                    window.location.href = escapeRedirect;
+                    
+                }
+            });
+        });
+    </script>
+</div>
+
