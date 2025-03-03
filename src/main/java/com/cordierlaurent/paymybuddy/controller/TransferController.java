@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.service.ConnectionService;
@@ -51,27 +52,32 @@ public class TransferController {
             @RequestParam String description,
             @RequestParam BigDecimal amount,
             Principal principal, 
-            Model model) {
+            RedirectAttributes redirectAttributes) {
         log.debug("PostMapping/transfer,friendId="+friendId+",description="+description+",amount="+amount);
         
         User sender = userService.getAuthenticatedUser(principal);
         User receiver = userService.getById(friendId);
 
         Result result = transactionService.addTransaction(sender, receiver, description, amount);
+        log.debug("PostMapping/transactionService.addTransaction,result="+result);
         
-        if (result.isSuccess()) {
-            model.addAttribute("successMessage", result.getMessage());
-        } else {
-            model.addAttribute("errorMessage", result.getMessage());
-        }
-
         /*
-        return "redirect:/transfer" mieux que de faire cela car Spring MVC ne conserve pas les données du Model => une requête http supplémentaire mais c'est une meilleure pratique. 
+        return "redirect:/transfer" est une meilleure pratique que de faire cela car Spring MVC ne conserve pas les données du Model (même si cela implique une requête http supplémentaire).
         model.addAttribute("user", sender);
         model.addAttribute("friends", connectionService.getFriends(sender.getId()));
         model.addAttribute("transactions", transactionService.getUserTransactions(sender.getId()));        
         return "transfer";
         */        
+        /*
+        Comme Model ne persiste pas entre les requêtes, il faut donc utiliser RedirectAttributes pour passer des messages temporaires qui survivent à une redirection.
+        */
+        if (result.isSuccess()) {
+            // model.addAttribute("successMessage", result.getMessage());
+            redirectAttributes.addFlashAttribute("successMessage", result.getMessage());
+        } else {
+            // model.addAttribute("errorMessage", result.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", result.getMessage());
+        }
         return "redirect:/transfer";
         
     }
