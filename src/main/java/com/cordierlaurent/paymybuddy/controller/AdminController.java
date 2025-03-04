@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.cordierlaurent.paymybuddy.model.Transaction;
+import com.cordierlaurent.paymybuddy.dto.AdminTransactionDTO;
 import com.cordierlaurent.paymybuddy.service.TransactionService;
 
 //@RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
@@ -21,7 +21,7 @@ public class AdminController {
     // .......................partie admin pour tests.................................
     @GetMapping("/admin/transactions")
     public String displayTransactions(Model model) {
-        List<Transaction> transactions = transactionService.getAllTransactions();
+        List<AdminTransactionDTO> transactions = transactionService.getAllTransactions();
         // pour test affichage vide.
         //transactions.clear();
         // permet d’ajouter à Model un objet de mon choix.

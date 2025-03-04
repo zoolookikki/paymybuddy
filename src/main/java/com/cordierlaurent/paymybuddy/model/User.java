@@ -32,7 +32,7 @@ Non utilisation de @Data car génère equals() et hashCode(), ce qui peut être 
 @ToString
 public class User {
     
-    // contructeur utilisé pour les tests d'intégration.s
+    // contructeur utilisé pour les tests d'intégration + transformation DTO->entity
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;

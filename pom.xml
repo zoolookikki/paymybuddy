@@ -105,11 +105,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
-		<!-- for validating the body of the rest api during creation/deletion @Valid -->
+		
+		<!-- WARNING : both dependency are necessary -->
+		<!-- Defines validation annotations (@Valid, @NotBlank, etc.) -->
 		<dependency>
 		    <groupId>jakarta.validation</groupId>
 		    <artifactId>jakarta.validation-api</artifactId>
 		</dependency>
+		<!-- Implement validation with Hibernate Validator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
 	</dependencies>
 
 	<build>

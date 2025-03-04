@@ -15,17 +15,43 @@
         <div class="container p-4 bg-white shadow rounded text-center" style="max-width: 350px;">
             <h2 class="mb-4">Inscription</h2>
             <div th:replace="~{fragments/messages :: messages}"></div>
+            
             <!-- th:object="${objet}" associe le formulaire à un objet qui est envoyé depuis le contrôleur Spring => lorsqu'on fera le submit, 
             les attributs de l'ojbet user seront automatiquement remplis pour le controleur qui fait le postmapping -->
-            <form th:action="@{/register}" th:object="${user}" method="post">
-                <label for="name">Nom</label>
-                <input type="text" th:field="*{name}" name="name" class="form-control mb-3" required autofocus>
-                <label for="email">E-mail</label>
-                <input type="email" th:field="*{email}" name="email" class="form-control mb-3" required>
-                <label for="password">Mot de passe</label>
-                <input type="password" th:field="*{password}" name="password" class="form-control mb-3" required>
+            <form th:action="@{/register}" th:object="${registerRequest}" method="post">
+                <!-- Champ Nom -->
+                <div class="mb-3 text-start">
+                    <label for="name" class="form-label">Nom</label>
+                    <input type="text" th:field="*{name}" name="name" 
+                           class="form-control" 
+                           th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" 
+                           required autofocus>
+                    <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" th:errors="*{name}"></div>
+                </div>
+
+                <!-- Champ Email -->
+                <div class="mb-3 text-start">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" th:field="*{email}" name="email" 
+                           class="form-control" 
+                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" 
+                           required>
+                    <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:errors="*{email}"></div>
+                </div>
+
+                <!-- Champ Mot de passe -->
+                <div class="mb-3 text-start">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" th:field="*{password}" name="password" 
+                           class="form-control" 
+                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" 
+                           required>
+                    <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback" th:errors="*{password}"></div>
+                </div>
+
                 <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
             </form>
+            
             <a th:href="@{/login}" class="d-block mt-3">Se connecter</a>
         </div>
     </div>

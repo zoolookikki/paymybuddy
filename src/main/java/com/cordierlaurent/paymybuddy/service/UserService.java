@@ -36,40 +36,30 @@ public class UserService {
     
     private Result userValidation(User user, boolean isUpdate, User currentUser) {
         log.debug("userValidation,user="+user+",isUpdate="+isUpdate+",currentUser="+currentUser);
-        if (isUpdate && currentUser == null)
-            throw new IllegalArgumentException("Internal error : userValidation");
-        
-        // cas impossibles car required sur le formulaire d'inscription mais par sécurité.
+
+        // erreurs normalement contrôlées par le required du formulaire et le @Valid...
+        if (user == null) {
+            throw new IllegalArgumentException("User must not be null");
+        }
         if (user.getName() == null || user.getName().trim().isEmpty()) {
-            return new Result(false, "Le nom est requis");
+            throw new IllegalArgumentException("Name cannot be empty");
         }
         if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
-            return new Result(false, "L'email est requis");
+            throw new IllegalArgumentException("Email cannot be empty");
         }
         if (!isUpdate && (user.getPassword() == null || user.getPassword().isEmpty())) {
-            return new Result(false, "Le mot de passe est requis");
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
+        if (isUpdate && currentUser == null) {
+            throw new IllegalArgumentException("Internal error : userValidation");
         }
 
-            
-        if (!user.getName().matches("^[A-Za-zÀ-ÖØ-öø-ÿ0-9 -]+$")) {
-            return new Result(false, "Le nom ne doit contenir que des lettres, chiffres, espaces ou tirets");
-        }
+        // erreurs utilisateur contrôlés par le service.
         if ((!isUpdate || !user.getName().equals(currentUser.getName())) && userRepository.findByName(user.getName()).isPresent()) {
             return new Result(false, "Le nom " + user.getName() + " est déjà utilisé"); 
         }
-
-        // normalement déjà contrôlé par le type=email sur le formulaire.
-        if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
-            return new Result(false, "Format d'e-mail invalide.");
-        }
         if ((!isUpdate || !user.getEmail().equals( currentUser.getEmail())) && userRepository.findByEmail(user.getEmail()).isPresent()) {
             return new Result(false, "L'email " + user.getEmail() + " est déjà utilisé");
-        }
-
-        if (!isUpdate || (user.getPassword() != null && !user.getPassword().isEmpty())) {
-            if (!user.getPassword().matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$")) {
-                return new Result(false, "Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial");
-            }
         }
 
         return new Result(true, "OK");

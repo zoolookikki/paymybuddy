@@ -5,15 +5,18 @@ import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cordierlaurent.paymybuddy.dto.ConnectionRequestDTO;
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.service.ConnectionService;
 import com.cordierlaurent.paymybuddy.service.UserService;
 import com.cordierlaurent.paymybuddy.util.Result;
 
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
 @Controller
@@ -22,25 +25,35 @@ public class ConnectionController {
 
     @Autowired
     private UserService userService;
-
+    
     @Autowired
     private ConnectionService connectionService;
     
     @GetMapping("/connection")
-    public String displayConnectionForm(Principal principal, Model model) {
+    public String displayConnectionForm(Model model) {
         log.debug("GetMapping/connection");
+        
+        model.addAttribute("connectionRequest", new ConnectionRequestDTO());
 
         return "connection"; 
     }    
     
     @PostMapping("/connection")
-    public String addConnection(@RequestParam String email, Principal principal, Model model) {
-        log.debug("PostMapping/connection,email="+email);
+    public String addConnection(
+            @ModelAttribute("connectionRequest") @Valid ConnectionRequestDTO connectionRequest,
+            BindingResult bindingResult,
+            Principal principal, 
+            Model model) {
+        log.debug("PostMapping/connection,connectionRequest="+connectionRequest);
+        
+        if (bindingResult.hasErrors()) {
+            return "connection";
+        }
         
         // Récupère l'utilisateur connecté
         User user = userService.getAuthenticatedUser(principal);
         
-        Result result = connectionService.add(user, email);
+        Result result = connectionService.add(user, connectionRequest.getEmail());
 
         if (result.isSuccess()) {
             model.addAttribute("successMessage", result.getMessage());

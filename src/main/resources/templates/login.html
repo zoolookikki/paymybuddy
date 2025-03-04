@@ -20,8 +20,9 @@
             <div th:if="${param.logout}" class="alert alert-success" role="alert">Vous avez été déconnecté.</div>
             <div th:if="${param.emailChanged}" class="alert alert-info" role="alert">Votre email a été modifié. Veuillez vous reconnecter.</div>
             <form th:action="@{/login}" method="post">
+                <!-- Attention : username et non email car page de login de Spring Security -->
                 <label for="username">Adresse e-mail</label>
-                <input type="text" name="username" class="form-control mb-3" required autofocus>
+                <input type="email" name="username" class="form-control mb-3" required autofocus>
                 <label for="password">Mot de passe</label>
                 <input type="password" name="password" class="form-control mb-3" required>
                 <button type="submit" class="btn btn-primary w-100">Se connecter</button>

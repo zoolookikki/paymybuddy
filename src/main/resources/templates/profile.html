@@ -15,23 +15,42 @@
     <div class="container bg-white p-4 shadow rounded" style="max-width: 400px;">
         <h2 class="mb-4">Modifier votre profil</h2>
         <div th:replace="~{fragments/messages :: messages}"></div>
+
         <!-- th:object="${objet}" associe le formulaire à un objet qui est envoyé depuis le contrôleur Spring => lorsqu'on fera le submit, 
         les attributs de l'ojbet user seront automatiquement remplis pour le controleur qui fait le postmapping -->
-        <form th:action="@{/profile}" th:object="${user}" method="post">
-            <div class="mb-3">
-                <label class="form-label">Nom</label>
-                <input type="text" th:field="*{name}" class="form-control" required autofocus>
+        <form th:action="@{/profile}" th:object="${updateProfileRequest}" method="post">
+            <!-- Champ Nom -->
+            <div class="mb-3 text-start">
+                <label for="name" class="form-label">Nom</label>
+                <input type="text" th:field="*{name}" name="name" 
+                       class="form-control" 
+                       th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''" 
+                       required autofocus>
+                <div th:if="${#fields.hasErrors('name')}" class="invalid-feedback" th:errors="*{name}"></div>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" th:field="*{email}" class="form-control" required>
+
+            <!-- Champ Email -->
+            <div class="mb-3 text-start">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" th:field="*{email}" name="email" 
+                       class="form-control" 
+                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" 
+                       required>
+                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:errors="*{email}"></div>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Nouveau mot de passe</label>
-                <input type="password" th:field="*{password}" class="form-control" placeholder="Laisser vide pour ne pas le modifier">
+
+            <!-- Champ Mot de passe -->
+            <div class="mb-3 text-start">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" th:field="*{password}" name="password" 
+                       class="form-control"  placeholder="Laisser vide pour ne pas le modifier"
+                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''">
+                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback" th:errors="*{password}"></div>
             </div>
+
             <button type="submit" class="btn btn-warning w-100">Mettre à jour</button>
         </form>
+        
     </div>
     
     <div th:replace="~{fragments/footer :: footer('profile')}"></div>

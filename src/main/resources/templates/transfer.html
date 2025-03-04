@@ -15,19 +15,48 @@
     <div class="container bg-white p-4 shadow rounded" style="max-width: 400px;">
         <h2 class="mb-4">Transfert</h2>
         <p><strong>Solde disponible :</strong> <span th:text="${user.balance}"></span></p>
+        
         <div th:replace="~{fragments/messages :: messages}"></div>
-        <form th:action="@{/transfer}" method="post">
-            <label for="friendId" class="form-label">Sélectionner une relation</label>
-            <select name="friendId" class="form-select mb-3" required autofocus>
-                <option value="" disabled selected>Choisissez une relation</option>
-                <option th:each="friend : ${friends}" th:value="${friend.id}" th:text="${friend.name}"></option>
-            </select>
-            <label for="description" class="form-label">Description</label>
-            <input type="text" class="form-control mb-3" name="description" required>
-            <label for="amount" class="form-label">Montant (€)</label>
-            <input type="number" class="form-control mb-3" step="0.01" min="0.01" name="amount" required>
+
+        <form th:action="@{/transfer}" th:object="${transactionRequest}" method="post">
+            
+            <div class="mb-3 text-start">
+                <label for="receiverId" class="form-label">Sélectionner une relation</label>
+                <select name="receiverId" class="form-select" 
+                        th:field="*{receiverId}" 
+                        th:classappend="${#fields.hasErrors('receiverId')} ? 'is-invalid' : ''" 
+                        required autofocus>
+                     <!-- Option par défaut avec valeur null pour empêcher la sélection automatique -->
+                     <!-- <option value="" disabled selected>Choisissez une relation</option> -->
+                     <option value="" th:selected="${transactionRequest.receiverId == null}">Choisissez une relation</option>
+                    <option th:each="friend : ${friends}" th:value="${friend.id}" th:text="${friend.name}"></option>
+                </select>
+                <div th:if="${#fields.hasErrors('receiverId')}" class="invalid-feedback" th:errors="*{receiverId}"></div>
+            </div>
+
+            <div class="mb-3 text-start">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" 
+                       th:field="*{description}" 
+                       th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''" 
+                       required>
+                <div th:if="${#fields.hasErrors('description')}" class="invalid-feedback" th:errors="*{description}"></div>
+            </div>
+
+            <div class="mb-3 text-start">
+                <label for="amount" class="form-label">Montant (€)</label>
+                <input type="number" class="form-control" 
+                       step="0.01" min="0.01" 
+                       th:field="*{amount}" 
+                       th:classappend="${#fields.hasErrors('amount')} ? 'is-invalid' : ''" 
+                       required>
+                <div th:if="${#fields.hasErrors('amount')}" class="invalid-feedback" th:errors="*{amount}"></div>
+            </div>
+
             <button class="btn btn-primary w-100">Payer</button>
+
         </form>
+        
     </div>
     
     <div class="container bg-white p-4 shadow rounded mt-4">

@@ -15,13 +15,23 @@
     <div class="container bg-white p-4 shadow rounded" style="max-width: 400px;">
         <h2 class="mb-4">Ajouter une relation</h2>
         <div th:replace="~{fragments/messages :: messages}"></div>
+        
         <!-- th:object="${objet}" associe le formulaire à un objet qui est envoyé depuis le contrôleur Spring => lorsqu'on fera le submit, 
         les attributs de l'ojbet user seront automatiquement remplis pour le controleur qui fait le postmapping -->
-        <form th:action="@{/connection}" method="post">
-            <label for="email" class="form-label">Chercher une relation</label>            
-            <input type="email" name="email" class="form-control mb-3" placeholder="Saisir une adresse e-mail" required autofocus>
-            <button type="submit"  class="btn btn-warning w-100">Ajouter</button>
-        </form>
+
+        <form th:action="@{/connection}" th:object="${connectionRequest}" method="post">
+            <div class="mb-3 text-start">
+                <label for="email" class="form-label">Chercher une relation</label>            
+                <input type="email" class="form-control" 
+                       th:field="*{email}" 
+                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" 
+                       placeholder="Saisir une adresse e-mail" required autofocus>
+                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:errors="*{email}"></div>
+            </div>
+
+            <button type="submit" class="btn btn-warning w-100">Ajouter</button>
+        </form>        
+        
     </div>
 
     <div th:replace="~{fragments/footer :: footer('transfer')}"></div>

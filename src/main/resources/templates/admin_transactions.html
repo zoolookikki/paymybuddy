@@ -30,8 +30,8 @@
             <tbody>
                 <tr th:each="transaction : ${transactions}">
                     <td th:text="${#dates.format(transaction.createdAt, 'EEEE dd MMMM yyyy HH:mm:ss')}"></td>
-                    <td th:text="${transaction.senderId}"></td>
-                    <td th:text="${transaction.receiverId}"></td>
+                    <td th:text="${transaction.userName}"></td>
+                    <td th:text="${transaction.friendName}"></td>
                     <td th:text="${transaction.description}"></td>
                     <td th:text="${transaction.amount}"></td>
                 </tr>

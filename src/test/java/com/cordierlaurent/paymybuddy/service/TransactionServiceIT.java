@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.cordierlaurent.paymybuddy.dto.AdminTransactionDTO;
 import com.cordierlaurent.paymybuddy.model.Transaction;
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.repository.ConnectionRepository;
@@ -68,10 +69,10 @@ public class TransactionServiceIT {
         // pour récupérer le user (avec son id autoincrémenté).
         return userRepository.findByEmail(userToCreate.getEmail()).orElseThrow();
     }
-    
+        
     private void checkThatNoTransactionExists(Result result) {
         assertThat(result.isSuccess()).isFalse();
-        List<Transaction> transactions = transactionService.getAllTransactions();
+        List<AdminTransactionDTO> transactions = transactionService.getAllTransactions();
         assertThat(transactions).isEmpty();
     }
 

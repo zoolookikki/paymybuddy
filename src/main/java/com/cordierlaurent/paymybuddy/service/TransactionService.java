@@ -8,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cordierlaurent.paymybuddy.dto.TransactionDTO;
+import com.cordierlaurent.paymybuddy.dto.AdminTransactionDTO;
+import com.cordierlaurent.paymybuddy.dto.UserTransactionDTO;
 import com.cordierlaurent.paymybuddy.exception.TransactionException;
 import com.cordierlaurent.paymybuddy.exception.UserNotFoundException;
 import com.cordierlaurent.paymybuddy.model.Transaction;
@@ -29,14 +30,16 @@ public class TransactionService {
     
     @Autowired
     private UserRepository userRepository;
-    
+        
     @Autowired
     private ConnectionRepository connectionRepository;
 
     // Rollback automatique si une erreur se produit (simplifie énormément le code => voir TransactionTemplate (alternative Spring Boot) ou EntityManager (niveau le plus bas).
     @Transactional
     public Result addTransaction(User sender, User receiver, String description, BigDecimal amount) {
-        // erreurs normalement contrôlées par le formulaire.
+        log.debug("addTransaction,sender="+sender+",receiver="+receiver+",description="+description+",amount="+amount);
+        
+        // erreurs normalement contrôlées par le required du formulaire et le @Valid...
         if (sender == null || receiver == null) {
             throw new IllegalArgumentException("Sender and receiver must not be null");
         }
@@ -47,7 +50,7 @@ public class TransactionService {
             throw new IllegalArgumentException("Amount must be greater than zero");
         }
         
-        // erreurs de logique de programmation.
+        // erreurs de logique, de programmation.
         if (sender.getId().equals(receiver.getId())) {
             throw new TransactionException("Internal error : addTransaction : senderId = receiverId");
         }
@@ -55,7 +58,7 @@ public class TransactionService {
             throw new TransactionException("Internal error : addTransaction : connection error : "+sender.getId()+ " "+receiver.getId());
         }   
         
-        // erreur utilisateur.
+        // erreurs utilisateur contrôlés par le service.
         if (sender.getBalance().compareTo(amount) < 0) {
             return new Result(false, "Votre solde est insufisant"); 
         }
@@ -85,16 +88,16 @@ public class TransactionService {
         return new Result (true, "La transaction a été effectuée");
     }
     
-    public List<TransactionDTO> getUserTransactions(Long userId) {
+    public List<UserTransactionDTO> getUserTransactions(Long userId) {
         List<Transaction> transactions = transactionRepository.findBySenderIdOrderByCreatedAtDesc(userId);
-        List<TransactionDTO> transactionDTOs = new ArrayList<>();
+        List<UserTransactionDTO> transactionDTOs = new ArrayList<>();
 
         for (Transaction transaction : transactions) {
             // Trouver l'ami (receiver)
             User friend = userRepository.findById(transaction.getReceiverId())
                     .orElseThrow(() -> new UserNotFoundException("Internal error : getUserTransactions : "+transaction.getReceiverId()));
 
-            TransactionDTO dto = new TransactionDTO(
+            UserTransactionDTO dto = new UserTransactionDTO(
                 transaction.getCreatedAt(),
                 friend.getName(),
                 transaction.getDescription(),
@@ -108,8 +111,30 @@ public class TransactionService {
     
     
     // pour Admin.
-    public List<Transaction> getAllTransactions() {
-        return transactionRepository.findAllByOrderByCreatedAtDesc();
+    public List<AdminTransactionDTO> getAllTransactions() {
+        List<Transaction> transactions = transactionRepository.findAllByOrderByCreatedAtDesc();
+        List<AdminTransactionDTO> transactionDTOs = new ArrayList<>();
+
+        for (Transaction transaction : transactions) {
+            // Trouver le responsable de la transaction (sender)
+            User user = userRepository.findById(transaction.getSenderId())
+                    .orElseThrow(() -> new UserNotFoundException("Internal error : getAllTransactions/sender : "+transaction.getSenderId()));
+            // Trouver l'ami (receiver)
+            User friend = userRepository.findById(transaction.getReceiverId())
+                    .orElseThrow(() -> new UserNotFoundException("Internal error : getAllTransactions/receiver : "+transaction.getReceiverId()));
+
+            AdminTransactionDTO dto = new AdminTransactionDTO(
+                transaction.getCreatedAt(),
+                user.getName(),
+                friend.getName(),
+                transaction.getDescription(),
+                transaction.getAmount()
+            );
+
+            transactionDTOs.add(dto);
+        }
+        
+        return transactionDTOs;
     }
     
 }
