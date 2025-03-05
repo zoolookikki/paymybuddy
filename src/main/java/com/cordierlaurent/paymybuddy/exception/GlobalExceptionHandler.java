@@ -1,40 +1,56 @@
 package com.cordierlaurent.paymybuddy.exception;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.ui.Model;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 
 @ControllerAdvice
 @Log4j2
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public String handleUserNotFoundException(HttpServletRequest request, Model model, UserNotFoundException e) {
-        log.error("UserNotFoundException interception : {}", e.getMessage());
-        // pour l'instant je laisse suite à différents tests mais je ne pense plus que ce soit utile car la redirection /logout buggue.
-        if (request.getRequestURI().equals("/logout")) {
-            log.debug("Ignorer UserNotFoundException car on est sur /logout");
-            throw e; // Laisse Spring Security gérer l'erreur (redirigera vers /login)
+    private String trap(Model model, String exceptionName, String message) {
+        log.error(exceptionName + " : " + message);
+        model.addAttribute("errorMessage", message);
+        return "myerror";
+    }
+
+    @ExceptionHandler({
+        UserNotFoundException.class,
+        TransactionException.class,
+        IllegalArgumentException.class,
+        // 404 (page not found) => ne fonctionne pas même en mettant dans application.properties : spring.mvc.throw-exception-if-no-handler-found=true
+        // elle arrive en exception générale voir ci-dessous...
+        NoHandlerFoundException.class,
+        DataAccessException.class,
+        // par sécurité si oubli de gérer le BindingResult
+        MethodArgumentNotValidException.class,
+        HttpRequestMethodNotSupportedException.class,
+        // la 404 (page not found) => arrive ici...  
+        // Ici, on récupère tout le reste.
+        Exception.class
+    })
+    public String handleExceptions(Model model, Exception e) {
+
+        String exceptionName = e.getClass().getSimpleName();
+        String message = e.getMessage();
+
+        // ici je préfère ne pas montrer la requête SQL générée à l'utilisateur.
+        if (e instanceof DataAccessException) {
+            message = "Database error"; 
         }
-        model.addAttribute("errorMessage", e.getMessage()); 
-        return "myerror"; 
+        // à reformater.
+        else if (e instanceof MethodArgumentNotValidException) {
+            MethodArgumentNotValidException ex = (MethodArgumentNotValidException) e;
+            message = ex.getBindingResult().getFieldError() != null 
+                ? ex.getBindingResult().getFieldError().getDefaultMessage()
+                : "Invalid data";
+        } 
+        return trap(model, exceptionName, message);
     }
-    
-    @ExceptionHandler(TransactionException.class)
-    public String handleTransactionException(Model model, TransactionException e) {
-        log.error("TransactionException interception : {}", e.getMessage());
-        model.addAttribute("errorMessage", e.getMessage()); 
-        return "myerror"; 
-    }
-    
-    @ExceptionHandler(IllegalArgumentException.class)
-    public String handleIllegalArgumentException(Model model, IllegalArgumentException e) {
-        log.error("IllegalArgumentException interception : {}", e.getMessage());
-        model.addAttribute("errorMessage", e.getMessage()); 
-        return "myerror"; 
-    }
-    
 }

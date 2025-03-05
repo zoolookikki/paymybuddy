@@ -27,7 +27,7 @@ public class ConnectionService {
     
     @Autowired
     private UserRepository userRepository;
-    
+        
     public Result add(User user, String email) {
         log.debug("ConnectionService.add,userId="+user.getId()+",email="+email);
 
@@ -43,7 +43,7 @@ public class ConnectionService {
         
         Optional<User> optionalFriend = userService.getByEmail(email);
         if (optionalFriend.isEmpty()) {
-            return new Result(false, "Cet utilisateur n'existe pas"); 
+            return new Result(false, "L'utilisateur " + email + " n'existe pas"); 
         }
         // pour simplification ensuite.
         User friend = optionalFriend.get();
@@ -53,7 +53,7 @@ public class ConnectionService {
         }
 
         if (connectionRepository.existsByUserIdAndFriendId(user.getId(), friend.getId())) {
-            return new Result(false, "Vous avez déjà ajouté cet utilisateur");
+            return new Result(false, "Vous avez déjà ajouté l'utilisateur "+friend.getEmail());
         }
 
         Connection connection = new Connection();
@@ -70,7 +70,7 @@ public class ConnectionService {
         connectionRepository.save(reverseConnection);
         */
 
-        return new Result(true,"L'utilisateur a été ajouté");
+        return new Result(true,"L'utilisateur " + email + " a été ajouté");
     }
     
     public List<Connection> getConnections(Long userId) {

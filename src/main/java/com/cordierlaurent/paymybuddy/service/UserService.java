@@ -28,12 +28,12 @@ public class UserService {
     // méthode qui renvoit si elle fonctionne l'utilisateur courant (sinon c'est une erreur interne grave).
     public User getAuthenticatedUser(Principal principal) {
         // tests exceptions.
-//        throw new IllegalArgumentException("ILLEGAL");
-//        throw new UserNotFoundException("USERNOTFOUND");
+//      throw new IllegalArgumentException("ILLEGAL");
+//      throw new UserNotFoundException("USERNOTFOUND");
         return userRepository.findByEmail(principal.getName())
                 .orElseThrow(() -> new UserNotFoundException("Internal error : getAuthenticatedUser ; "+principal.getName()));
     }
-    
+        
     private Result userValidation(User user, boolean isUpdate, User currentUser) {
         log.debug("userValidation,user="+user+",isUpdate="+isUpdate+",currentUser="+currentUser);
 
@@ -87,6 +87,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         
         userRepository.save(user);
+        
         return new Result(true,"Votre inscription a réussi");
     }
     

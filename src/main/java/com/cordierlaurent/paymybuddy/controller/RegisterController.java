@@ -31,6 +31,7 @@ public class RegisterController {
         
         // new ... = objet vide pour faire le lien avec le formulaire Thymeleaf.
         model.addAttribute("registerRequest", new RegisterRequestDTO());
+        
         // on affiche le formulaire.
         return "register"; 
     }
@@ -49,12 +50,14 @@ public class RegisterController {
         }
         
         Result result = userService.add(new User(registerRequest.getName(), registerRequest.getEmail(), registerRequest.getPassword()));
+        log.info(registerRequest.getEmail()+"=>"+result.getMessage());
         
         if (result.isSuccess()) {
             model.addAttribute("successMessage", result.getMessage());
             return "login";
         }
         model.addAttribute("errorMessage", result.getMessage()); 
+        
         return "register";
     }
     

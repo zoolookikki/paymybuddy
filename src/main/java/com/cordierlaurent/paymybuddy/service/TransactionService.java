@@ -33,7 +33,7 @@ public class TransactionService {
         
     @Autowired
     private ConnectionRepository connectionRepository;
-
+    
     // Rollback automatique si une erreur se produit (simplifie énormément le code => voir TransactionTemplate (alternative Spring Boot) ou EntityManager (niveau le plus bas).
     @Transactional
     public Result addTransaction(User sender, User receiver, String description, BigDecimal amount) {
@@ -60,7 +60,7 @@ public class TransactionService {
         
         // erreurs utilisateur contrôlés par le service.
         if (sender.getBalance().compareTo(amount) < 0) {
-            return new Result(false, "Votre solde est insufisant"); 
+            return new Result(false, "Votre solde de " +sender.getBalance()+  " € est insufisant"); 
         }
 
         // sauvegarde de la transaction.
@@ -85,7 +85,7 @@ public class TransactionService {
 */        
         userRepository.save(receiver);
         
-        return new Result (true, "La transaction a été effectuée");
+        return new Result (true, "La transaction de " + amount + " € a été effectuée");
     }
     
     public List<UserTransactionDTO> getUserTransactions(Long userId) {

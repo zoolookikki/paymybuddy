@@ -54,6 +54,7 @@ public class ConnectionController {
         User user = userService.getAuthenticatedUser(principal);
         
         Result result = connectionService.add(user, connectionRequest.getEmail());
+        log.info(user.getEmail()+"=>"+result.getMessage());
 
         if (result.isSuccess()) {
             model.addAttribute("successMessage", result.getMessage());

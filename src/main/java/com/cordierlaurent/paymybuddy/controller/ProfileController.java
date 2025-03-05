@@ -30,7 +30,7 @@ public class ProfileController {
     
     @Autowired
     private UserService userService;
-    
+        
     @GetMapping("/profile")
     // Principal représente l'utilisateur actuellement authentifié => email est dans getName().
     public String displayProfileForm(Principal principal, Model model) {
@@ -40,14 +40,14 @@ public class ProfileController {
         User user = userService.getAuthenticatedUser(principal);
         // pour l'afficher dans le formulaire.
         model.addAttribute("updateProfileRequest", new UpdateProfileRequestDTO(user.getName(), user.getEmail(), ""));
-        // on affiche la page de modification de profil.
+        
         return "profile";
     }
 
     @PostMapping("/profile")
     // @ModelAttribute permet de lier les champs d’un formulaire HTML à un objet Java.
     // @Valid pour valider tout ce qui a été déclaré comme à contrôler dans le DTO.
-    // BindingResult est une interface qui sert à capturer et gérer les erreurs de validation lorsqu’un formulaire est soumis.
+    // BindingResult est une interface qui sert à capturer et gérer les erreurs de validation lorsqu’un formulaire est soumis => attention si on oublie => MethodArgumentNotValidException.
     // Principal représente l'utilisateur actuellement authentifié => email est dans getName().
     // Model permet de transmettre des données de la couche serveur (Java) vers la vue (Thymeleaf).
     // HttpServletRequest et HttpServletResponse pour la déconnexion.
@@ -62,11 +62,12 @@ public class ProfileController {
 
         // pour afficher le formulaire avec les erreurs automatiquement.
         if (bindingResult.hasErrors()) {
-            return "profile"; 
-        }
+          return "profile"; 
+      }
         
         User user = userService.getAuthenticatedUser(principal);
         Result result = userService.update(user, new User(updateProfileRequest.getName(), updateProfileRequest.getEmail(), updateProfileRequest.getPassword()));
+        log.info(user.getEmail()+"=>"+result.getMessage());
 
         if (result.isSuccess()) {
             if (!principal.getName().equals(updateProfileRequest.getEmail())) {
@@ -88,6 +89,7 @@ public class ProfileController {
 
         // On affiche la même page avec les données misent à jour ou non et le message (ok ou nok).
         model.addAttribute("updateProfileRequest", new UpdateProfileRequestDTO(user.getName(), user.getEmail(), ""));
+
         return "profile";
     }
  

@@ -94,7 +94,8 @@ public class SpringSecurityConfiguration {
                         // Tout le monde peut y accéder                        
                         .permitAll() 
                 )
-                
+                // permet de rediriger les erreurs 403 (acces denied) vers ErrorController car Spring Security intercepte l'erreur ==> ne va pas dans GlobalExceptionHandler.
+                .exceptionHandling(exception -> exception.accessDeniedPage("/error/403"))
                 
                 // Construit et applique la configuration de sécurité.
                 .build();

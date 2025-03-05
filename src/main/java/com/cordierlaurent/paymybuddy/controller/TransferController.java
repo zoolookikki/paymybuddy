@@ -68,7 +68,7 @@ public class TransferController {
         User receiver = userService.getById(transactionRequest.getReceiverId());
 
         Result result = transactionService.addTransaction(sender, receiver, transactionRequest.getDescription(), transactionRequest.getAmount());
-        log.debug("PostMapping/transactionService.addTransaction,result="+result);
+        log.info(sender.getEmail()+"=>"+result.getMessage());
         
         if (result.isSuccess()) {
             model.addAttribute("successMessage", result.getMessage());

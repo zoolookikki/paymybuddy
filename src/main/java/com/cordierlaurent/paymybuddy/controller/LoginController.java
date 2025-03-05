@@ -13,22 +13,22 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        log.debug("login");
-        // Redirige vers login.html dans /templates
+        log.debug("GetMapping/login");
+
         return "login"; 
     }
     
     @GetMapping("/user")
     public String getUser() {
-        log.debug("user");
-        // Redirige vers user.html dans /templates
+        log.debug("GetMapping/user");
+
         return "user";
     }
     
     @GetMapping("/admin")
     public String getAdmin() {
-        log.debug("admin");
-        // Redirige vers admin.html dans /templates
+        log.debug("GetMapping/admin");
+
         return "admin";
     }
     
