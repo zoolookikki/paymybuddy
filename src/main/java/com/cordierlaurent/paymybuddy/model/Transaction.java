@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,11 +47,21 @@ public class Transaction {
     @Column(nullable = false, insertable = false, updatable = false)
     private Timestamp createdAt;
     
-    @Column(name = "sender_id", nullable = false)
-    private Long senderId;  
+    // @ManyToOne car plusieurs transactions peuvent appartenir à un utilisateur éméteur.
+    // @JoinColumn au lieu @Column pour indiquer à JPA comment faire la relation @ManyToOne et donc faire la jointure automatiquement.
+    //@Column(name = "sender_id", nullable = false)
+    // private Long senderId;
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
-    @Column(name = "receiver_id", nullable = false)
-    private Long receiverId;
+    // @ManyToOne car plusieurs transactions peuvent appartenir à un utilisateur bénéficiare.
+    // @JoinColumn au lieu @Column pour indiquer à JPA comment faire la relation @ManyToOne et donc faire la jointure automatiquement.
+    // @Column(name = "receiver_id", nullable = false)
+    // private Long receiverId;
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
     
     @Column(nullable = false, length = 255)
     private String description;

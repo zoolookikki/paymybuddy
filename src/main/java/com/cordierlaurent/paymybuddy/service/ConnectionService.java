@@ -57,8 +57,8 @@ public class ConnectionService {
         }
 
         Connection connection = new Connection();
-        connection.setUserId(user.getId());
-        connection.setFriendId(friend.getId());
+        connection.setUser(user);
+        connection.setFriend(friend);
         connectionRepository.save(connection);
 
         // optionnel : ajout de la relation inverse (friend vers user)
@@ -84,7 +84,7 @@ public class ConnectionService {
         List<Connection> connections = connectionRepository.findByUserId(userId);
         List<Long> friendIds = new ArrayList<>();
         for (Connection connection : connections) {
-            friendIds.add(connection.getFriendId());
+            friendIds.add(connection.getFriend().getId());
         }
         // trouve tous les utilisateurs amis avec la liste des id amis
         return userRepository.findAllById(friendIds);
@@ -106,8 +106,8 @@ public class ConnectionService {
         }
 
         Connection connection = new Connection();
-        connection.setUserId(user.getId());
-        connection.setFriendId(friend.getId());
+        connection.setUser(user);
+        connection.setFriend(friend);
         connectionRepository.save(connection);
 
         // optionnel : ajout de la relation inverse (friend vers user)

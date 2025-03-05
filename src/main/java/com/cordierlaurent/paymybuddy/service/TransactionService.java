@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cordierlaurent.paymybuddy.dto.AdminTransactionDTO;
 import com.cordierlaurent.paymybuddy.dto.UserTransactionDTO;
 import com.cordierlaurent.paymybuddy.exception.TransactionException;
-import com.cordierlaurent.paymybuddy.exception.UserNotFoundException;
 import com.cordierlaurent.paymybuddy.model.Transaction;
 import com.cordierlaurent.paymybuddy.model.User;
 import com.cordierlaurent.paymybuddy.repository.ConnectionRepository;
@@ -65,8 +64,11 @@ public class TransactionService {
 
         // sauvegarde de la transaction.
         Transaction transaction = new Transaction();
-        transaction.setSenderId(sender.getId());
-        transaction.setReceiverId(receiver.getId());
+        // refactorisation relations JPA.
+        // transaction.setSenderId(sender.getId());
+        // transaction.setReceiverId(receiver.getId());
+        transaction.setSender(sender);
+        transaction.setReceiver(receiver);
         transaction.setDescription(description);
         transaction.setAmount(amount);
 
@@ -93,13 +95,9 @@ public class TransactionService {
         List<UserTransactionDTO> transactionDTOs = new ArrayList<>();
 
         for (Transaction transaction : transactions) {
-            // Trouver l'ami (receiver)
-            User friend = userRepository.findById(transaction.getReceiverId())
-                    .orElseThrow(() -> new UserNotFoundException("Internal error : getUserTransactions : "+transaction.getReceiverId()));
-
             UserTransactionDTO dto = new UserTransactionDTO(
                 transaction.getCreatedAt(),
-                friend.getName(),
+                transaction.getReceiver().getName(),
                 transaction.getDescription(),
                 transaction.getAmount()
             );
@@ -116,17 +114,10 @@ public class TransactionService {
         List<AdminTransactionDTO> transactionDTOs = new ArrayList<>();
 
         for (Transaction transaction : transactions) {
-            // Trouver le responsable de la transaction (sender)
-            User user = userRepository.findById(transaction.getSenderId())
-                    .orElseThrow(() -> new UserNotFoundException("Internal error : getAllTransactions/sender : "+transaction.getSenderId()));
-            // Trouver l'ami (receiver)
-            User friend = userRepository.findById(transaction.getReceiverId())
-                    .orElseThrow(() -> new UserNotFoundException("Internal error : getAllTransactions/receiver : "+transaction.getReceiverId()));
-
             AdminTransactionDTO dto = new AdminTransactionDTO(
                 transaction.getCreatedAt(),
-                user.getName(),
-                friend.getName(),
+                transaction.getSender().getName(),
+                transaction.getReceiver().getName(),
                 transaction.getDescription(),
                 transaction.getAmount()
             );
