@@ -64,9 +64,6 @@ public class TransactionService {
 
         // sauvegarde de la transaction.
         Transaction transaction = new Transaction();
-        // refactorisation relations JPA.
-        // transaction.setSenderId(sender.getId());
-        // transaction.setReceiverId(receiver.getId());
         transaction.setSender(sender);
         transaction.setReceiver(receiver);
         transaction.setDescription(description);
