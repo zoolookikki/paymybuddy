@@ -2,9 +2,9 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container-fluid d-flex align-items-center">
             <!-- Logo -->
-            <a class="navbar-brand ms-3" href="/">
+            <div class="navbar-brand ms-3">
                 <img th:src="@{/images/logo.png}" alt="Logo Pay My Buddy" height="50">
-            </a>
+            </div>
             <span th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'dd MMMM yyyy HH:mm')}"></span>
 
             <!-- Spacer pour pousser le menu à droite -->
