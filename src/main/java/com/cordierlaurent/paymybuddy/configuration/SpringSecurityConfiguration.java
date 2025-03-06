@@ -42,7 +42,7 @@ public class SpringSecurityConfiguration {
                 */
                 .authorizeHttpRequests(auth -> {
                     // Autoriser les fichiers statiques : sinon le logo ne s'affichait pas sur la page de login.
-                    auth.requestMatchers("/images/**", "/css/**", "/js/**").permitAll();
+                    auth.requestMatchers("/favicon.ico", "/images/**", "/css/**", "/js/**").permitAll();
                     // Autoriser l'accès à la page de login et d'inscription sans authentification.
                     auth.requestMatchers("/login", "/register").permitAll();
                     /*
