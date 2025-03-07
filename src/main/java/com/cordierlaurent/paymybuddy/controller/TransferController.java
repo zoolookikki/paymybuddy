@@ -46,7 +46,7 @@ public class TransferController {
 
         model.addAttribute("user", user);
         model.addAttribute("friends", connectionService.getFriends(user.getId()));
-        model.addAttribute("transactions", transactionService.getUserTransactions(user.getId()));
+        model.addAttribute("transactions", transactionService.getUserTransactionsDTOs(user.getId()));
 
         return "transfer"; 
     }
@@ -80,7 +80,7 @@ public class TransferController {
         // Cette partie est à recharger.
         model.addAttribute("user", sender);
         model.addAttribute("friends", connectionService.getFriends(sender.getId()));
-        model.addAttribute("transactions", transactionService.getUserTransactions(sender.getId()));
+        model.addAttribute("transactions", transactionService.getUserTransactionsDTOs(sender.getId()));
         
         return "transfer";
         

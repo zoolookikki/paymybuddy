@@ -87,8 +87,12 @@ public class TransactionService {
         return new Result (true, "La transaction de " + amount + " € a été effectuée");
     }
     
-    public List<UserTransactionDTO> getUserTransactions(Long userId) {
-        List<Transaction> transactions = transactionRepository.findBySenderIdOrderByCreatedAtDesc(userId);
+    public List<Transaction> getUserTransactions(Long userId) {
+        return transactionRepository.findBySenderIdOrderByCreatedAtDesc(userId);
+    }
+
+    public List<UserTransactionDTO> getUserTransactionsDTOs(Long userId) {
+        List<Transaction> transactions = getUserTransactions(userId);
         List<UserTransactionDTO> transactionDTOs = new ArrayList<>();
 
         for (Transaction transaction : transactions) {
