@@ -4,8 +4,8 @@
 **Pay My Buddy** est une application qui permet à ses utilisateurs d'effectuer des **transferts d'argent** entre amis de manière **simple et sécurisée**.
 
 ## Présentation de la base de données
-L'application utilise **MySQL**.
-Avant de lancer l’application, vous devez créer la base de données et importer les scripts SQL.
+L'application utilise **MySQL**.  
+Avant de lancer l’application, vous devez créer la base de données et importer les scripts SQL.  
 Les détails du modèle de données se trouvent dans la section "Base de Données".
 
 ## Installation
@@ -25,20 +25,20 @@ Avant d'installer l'application, assurez-vous d'avoir installé :
    ```sh
    mvn clean package
    ```
-3. **Configurer la base de données** :
-   Avant de lancer l'application, la base de données MySQL **doit être initialisée** avec les bonnes structures et les données de test.
-   pay_my_buddy.sql est le script de création des tables.
-   load_data.sql est le script permettant de charger des données de test.
-   Exécuter les scripts SQL situés dans le répertoire sql :
+3. **Configurer la base de données** :  
+   Avant de lancer l'application, la base de données MySQL **doit être initialisée** avec les bonnes structures et les données de test.  
+   pay_my_buddy.sql est le script de création des tables.  
+   load_data.sql est le script permettant de charger des données de test.  
+   Exécuter les scripts SQL situés dans le répertoire sql :  
    ```sh
    mysql -u root -p < sql/pay_my_buddy.sql
    ```
    ```sh
    mysql -u root -p pay_my_buddy < sql/load_data.sql
    ```
-4. **Paramétrer la connexion à la base de données** :
-   L'application utilise des **variables d'environnement** pour sécuriser la connexion à la base de données et éviter d’exposer directement les identifiants dans le code source. 
-   Avant de lancer l'application, assurez-vous de définir les variables suivantes :
+4. **Paramétrer la connexion à la base de données** :  
+   L'application utilise des **variables d'environnement** pour sécuriser la connexion à la base de données et éviter d’exposer directement les identifiants dans le code source.   
+   Avant de lancer l'application, assurez-vous de définir les variables suivantes :  
    ```sh
    PAYMYBUDDY_SPRING_DATASOURCE_URL "jdbc:mysql://localhost:3306/pay_my_buddy?serverTimezone=UTC"
    PAYMYBUDDY_SPRING_DATASOURCE_USERNAME "votre nom d'utilisateur"
@@ -48,20 +48,20 @@ Avant d'installer l'application, assurez-vous d'avoir installé :
    ```sh
    mvn spring-boot:run 
    ```
-   ou 
+   ou   
    ```sh
    java -jar target\paymybuddy-0.0.1-SNAPSHOT.jar
    ```
-6. **Accéder à l'application** :
-   Si vous utilisez les données de test, le mot de passe par défaut de chaque utilisateur est son nom.
+6. **Accéder à l'application** :  
+   Si vous utilisez les données de test, le mot de passe par défaut de chaque utilisateur est son nom.  
    ```sh
    http://localhost:8080
    ```
 
 ## Base de Données
 
-L'application utilise MySQL pour stocker les utilisateurs, les transactions et les relations entre utilisateurs.
-**Spring Boot** gère la connexion grâce à **Spring Data JPA** et **MySQL Connector**.
+L'application utilise MySQL pour stocker les utilisateurs, les transactions et les relations entre utilisateurs.  
+**Spring Boot** gère la connexion grâce à **Spring Data JPA** et **MySQL Connector**.  
 
 ### Modèle Physique de Données (MPD)
 
