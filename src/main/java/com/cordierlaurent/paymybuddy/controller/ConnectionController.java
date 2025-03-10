@@ -58,6 +58,8 @@ public class ConnectionController {
 
         if (result.isSuccess()) {
             model.addAttribute("successMessage", result.getMessage());
+           // Réinitialisation du formulaire
+            model.addAttribute("connectionRequest", new ConnectionRequestDTO()); 
         } else {
             model.addAttribute("errorMessage", result.getMessage());
         }
