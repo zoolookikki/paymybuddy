@@ -90,36 +90,4 @@ public class ConnectionService {
         return userRepository.findAllById(friendIds);
     }
     
-    // Anciennes fonctions à garder pour le moment.
-    public Result add(User user, User friend) {
-        if (user == null || friend == null) {
-            throw new IllegalArgumentException("User and friend must not be null");
-        }        
-        
-        log.debug("ConnectionService.add,userId="+user.getId()+",friendId="+friend.getId());
-        if (user.getId().equals(friend.getId())) {
-            return new Result(false, "You cannot add yourself"); 
-        }
-
-        if (connectionRepository.existsByUserIdAndFriendId(user.getId(), friend.getId())) {
-            return new Result(false, "You have already added this user");
-        }
-
-        Connection connection = new Connection();
-        connection.setUser(user);
-        connection.setFriend(friend);
-        connectionRepository.save(connection);
-
-        // optionnel : ajout de la relation inverse (friend vers user)
-        // ATTENTION SI MISE EN ROUTE ==> IL FAUT FAIRE UN @Transactional sur cette fonction.
-        /*
-        Connection reverseConnection = new Connection();
-        connection.setUserId(friend.getId());
-        connection.setFriendId(user.getId());
-        connectionRepository.save(reverseConnection);
-        */
-
-        return new Result(true,"Your friend is registered");
-    }    
-    
 }

@@ -40,13 +40,13 @@ public class SpringSecurityConfiguration {
                 Permet de configurer les autorisations d'accès aux différentes routes.
                 Définit qui peut accéder à quelles URLs, en fonction des rôles utilisateurs.
                 */
-                // Désactiver CSRF (Cross-Site Request Forgery) uniquement pour l'api de test sinon il est interdit d'y accéder pour la tester sans gérer un token CSRF (activée par défaut pour empêcher certaines attaques sur les formulaires HTML).
+                // Désactiver CSRF (Cross-Site Request Forgery) uniquement pour l'api de test sinon il est interdit d'y accéder pour la tester sans gérer un jeton unique pour chaque session (activée par défaut pour empêcher certaines attaques sur les formulaires HTML).
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/apitest/**")) 
                 .authorizeHttpRequests(auth -> {
-                    // Autoriser les fichiers statiques : sinon le logo ne s'affichait pas sur la page de login.
-                    auth.requestMatchers("/favicon.ico", "/images/**", "/css/**", "/js/**").permitAll();
                     // Autoriser l'accès à la page de login et d'inscription sans authentification.
                     auth.requestMatchers("/login", "/register").permitAll();
+                    // Autoriser les fichiers statiques : sinon le logo ne s'affichait pas sur la page de login.
+                    auth.requestMatchers("/favicon.ico", "/images/**", "/css/**", "/js/**").permitAll();
                     // Autoriser l'accès aux api pour tout le monde : api de test uniquement pour le moment donc ok.
                     auth.requestMatchers("/apitest/**").permitAll();
                     /*

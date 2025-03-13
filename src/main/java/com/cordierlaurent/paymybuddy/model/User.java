@@ -32,13 +32,6 @@ Non utilisation de @Data car génère equals() et hashCode(), ce qui peut être 
 @ToString
 public class User {
     
-    // contructeur utilisé pour les tests d'intégration + transformation DTO->entity
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
     // Indique que id est la clé primaire.
     @Id
     // Indique que la valeur de la clé primaire est générée automatiquement par la base de données, en utilisant une auto-incrémentation.
@@ -68,5 +61,15 @@ public class User {
     private String password;
 
     @Column(nullable = false, precision = 8, scale = 2)
-    private BigDecimal balance = BigDecimal.ZERO; 
+    private BigDecimal balance = BigDecimal.ZERO;
+    
+    // Constructeur utilisé pour créer un utilisateur sans ID ni date.
+    public User(String name, String email, String password) {
+        this.role = "USER"; 
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.balance = BigDecimal.ZERO; 
+    }
+    
 }

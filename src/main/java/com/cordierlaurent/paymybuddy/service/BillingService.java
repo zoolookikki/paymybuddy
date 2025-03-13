@@ -12,5 +12,4 @@ public interface BillingService {
     List<InvoiceDTO> getInvoicesByUser(Long userId);
     void deleteInvoice(Long invoiceId);
     
-}    
-
+}

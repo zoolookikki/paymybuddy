@@ -32,6 +32,7 @@ Non utilisation de @Data car génère equals() et hashCode(), ce qui peut être 
 //important pour afficher le contenu des objets simplement avec log4j2.
 @ToString
 public class Connection {
+    
     // Indique que id est la clé primaire.
     @Id
     // Indique que la valeur de la clé primaire est générée automatiquement par la base de données, en utilisant une auto-incrémentation.
@@ -62,4 +63,10 @@ public class Connection {
     @Column(nullable = false, insertable = false, updatable = false)
     private Timestamp createdAt;
 
+    // Constructeur utilisé pour créer une connexion sans ID ni date.
+    public Connection(User user, User friend) {
+        this.user = user;
+        this.friend = friend;
+    }    
+    
 }

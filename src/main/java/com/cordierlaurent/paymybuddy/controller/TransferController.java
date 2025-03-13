@@ -59,12 +59,16 @@ public class TransferController {
             Model model) { 
         log.debug("PostMapping/transfer,transactionRequest="+transactionRequest);
         
+        User sender = userService.getAuthenticatedUser(principal);
+        
+        // toujours ajouter au moins le user sinon Thymeleaf plante en cas d'erreur sur la validation @Valid.
+        model.addAttribute("user", sender);
+
         // pour afficher le formulaire avec les erreurs automatiquement.
         if (bindingResult.hasErrors()) {
             return "transfer"; 
         }
 
-        User sender = userService.getAuthenticatedUser(principal);
         User receiver = userService.getById(transactionRequest.getReceiverId());
 
         Result result = transactionService.addTransaction(sender, receiver, transactionRequest.getDescription(), transactionRequest.getAmount());
