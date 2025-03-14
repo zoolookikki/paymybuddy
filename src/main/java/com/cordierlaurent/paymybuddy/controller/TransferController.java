@@ -20,6 +20,12 @@ import com.cordierlaurent.paymybuddy.util.Result;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Controller managing money transfers between users.
+ * <p>
+ * This controller allows users to view their balance, transactions, and transfer money to their friends via a Thymeleaf form.
+ * </p>
+ */
 //@RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
 //@Controller pour renvoyer une vue HTML en utilisant Thymeleaf (ou un autre moteur de template).
 @Controller
@@ -34,7 +40,17 @@ public class TransferController {
     
     @Autowired
     private TransactionService transactionService;
-    
+   
+    /**
+     * Displays the money transfer form.
+     * <p>
+     * This method retrieves the logged-in user's information, their friends list, and their transaction history to display on the transfer page.
+     * </p>
+     *
+     * @param principal Contains the authenticated user's information.
+     * @param model The model for passing data to the Thymeleaf view.
+     * @return The "transfer" view displaying the transfer form.
+     */
     @GetMapping("/transfer")
     public String displayTransferForm(Principal principal, Model model) {
         log.debug("GetMapping/transfer");
@@ -51,7 +67,27 @@ public class TransferController {
         return "transfer"; 
     }
     
+    
+    /**
+     * Process a money transfer.
+     * <p>
+     * This method handles the transfer form submission. It validates the entered data, verifies that the user has sufficient funds, and saves the transaction to the database.
+     * If the transfer is successful, a confirmation message is displayed.
+     * Otherwise, an error message is returned.
+     * </p>
+     * <p>
+     * </p>
+     *
+     * @param transactionRequestDTO Transaction details provided by the user.
+     * @param bindingResult  Result of form validation.
+     * @param principal Contains the authenticated user's information.
+     * @param model The model for passing data to the Thymeleaf view.
+     * @return The "transfer" view is updated with new data and confirmation or error messages.
+     */
     @PostMapping("/transfer")
+    // @ModelAttribute permet de lier les champs d’un formulaire HTML à un objet Java.
+    // @Valid pour valider tout ce qui a été déclaré comme à contrôler dans le DTO.
+    // BindingResult est une interface qui sert à capturer et gérer les erreurs de validation lorsqu’un formulaire est soumis.
     public String processTransfer(
             @ModelAttribute("transactionRequest") @Valid TransactionRequestDTO transactionRequest,
             BindingResult bindingResult,

@@ -8,7 +8,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-// Classe de base, abstraite, concernant l'utilisateur, commune à plusieurs DTO.
+/**
+ * Base, abstract, user-related class common to multiple DTOs.
+ * <p>
+ * @Value better than @Data for DTOs because it generates all fields final, meaning they cannot be changed after initialization.
+ * To avoid problems with modifying DTOs due to passing by reference in argument and function return.
+ * </p>
+ */
 /*
 @Data génère automatiquement des getters, setters, `toString`, equals, hashCode, et un constructeur par défaut => warning.
 Par défaut, Lombok génère equals() et hashCode() uniquement pour les champs de CommonUserDTO, et il ignore EmailDTO.

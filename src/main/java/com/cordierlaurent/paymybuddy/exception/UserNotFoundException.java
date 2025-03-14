@@ -1,6 +1,8 @@
 package com.cordierlaurent.paymybuddy.exception;
 
-// Toute erreur interne concernant un utilisateur qui n'existe plus dans la base de données.
+/**
+ * Any internal error regarding a user that no longer exists in the database.
+ */
 public class UserNotFoundException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 

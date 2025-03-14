@@ -7,9 +7,13 @@ import com.cordierlaurent.paymybuddy.model.Transaction;
 
 import lombok.Value;
 
-//pour l'affichage de la liste des transactions pour les utilisateurs.
-//@Value better than @Data for DTOs because it generates all fields final, meaning they cannot be changed after initialization.
-//To avoid problems with modifying DTOs due to passing by reference in argument and function return.
+/**
+ * For displaying a invoice.
+ * <p>
+ * @Value better than @Data for DTOs because it generates all fields final, meaning they cannot be changed after initialization.
+ * To avoid problems with modifying DTOs due to passing by reference in argument and function return.
+ * </p>
+ */
 @Value
 public class InvoiceDTO {
     private Long invoiceId;

@@ -19,6 +19,12 @@ import com.cordierlaurent.paymybuddy.service.TransactionService;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * REST controller for billing management.
+ * <p>
+ * This controller allows you to generate invoices from a user's transactions, retrieve individual or user-specific invoices, and delete existing invoices.
+ * </p>
+ */
 @RestController
 @Log4j2
 @RequestMapping("/apitest/billing")
@@ -29,7 +35,16 @@ public class BillingController {
 
     @Autowired 
     BillingService billingService;
-
+    
+    /**
+     * Creates an invoice for a given user based on their transactions.
+     * <p>
+     * This method retrieves a user's transactions based on their ID, then generates an associated invoice if any transactions are found.
+     * </p>
+     *
+     * @param userId The ID of the user to create an invoice for.
+     * @return A message indicating the success or failure of the creation.
+     */
     @PostMapping("/{userId}")
     public ResponseEntity<String> createInvoice(@PathVariable Long userId) {
         log.info("PostMapping/createInvoice,userId="+userId);
@@ -45,6 +60,12 @@ public class BillingController {
         return ResponseEntity.ok("Invoice created successfully");        
     }
 
+    /**
+     * Retrieves a specific invoice based on its ID.
+     *
+     * @param invoiceId The ID of the invoice to be retrieved.
+     * @return InvoiceDTO containing the details of the requested invoice.
+     */
     @GetMapping("/invoice/{invoiceId}")
     public InvoiceDTO getInvoice(@PathVariable Long invoiceId) {
         log.info("GetMapping/getInvoice,invoiceId="+invoiceId);
@@ -52,6 +73,12 @@ public class BillingController {
         return billingService.getInvoice(invoiceId);
     }
 
+    /**
+     * Retrieves the list of invoices for a specific user.
+     *
+     * @param userId The ID of the user whose invoices we want to retrieve.
+     * @return List of InvoiceDTO corresponding to the user's invoices.
+     */
     @GetMapping("/user/{userId}")
     public List<InvoiceDTO> getInvoicesByUser(@PathVariable Long userId) {
         log.info("GetMapping/getInvoiceByUser,userId="+userId);
@@ -59,6 +86,12 @@ public class BillingController {
         return billingService.getInvoicesByUser(userId);
     }
 
+    /**
+     * Deletes an existing invoice based on its ID.
+     *
+     * @param invoiceId The ID of the invoice to delete.
+     * @return A message indicating the deletion was successful.
+     */
     @DeleteMapping("/{invoiceId}")
     public ResponseEntity<String> deleteInvoice(@PathVariable Long invoiceId) {
         log.info("DeleteMapping/deleteInvoice,invoiceId="+invoiceId);

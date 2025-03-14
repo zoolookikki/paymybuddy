@@ -11,6 +11,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+/**
+ * Configuring application security with Spring Security.
+ * <p>
+ * This class defines authentication and authorization rules by specifying access to different routes and user management methods.
+ * </p>
+ *
+ * <p>
+ * Key features include:
+ * <ul>
+ *     <li>Definition of access authorizations</li>
+ *     <li>Customizing authentication and redirection after login</li>
+ *     <li>Managing disconnection and session invalidation</li>
+ *     <li>Configuring Password Encryption</li>
+ * </ul>
+ * </p>
+ */
 @Configuration
 @EnableWebSecurity // Active Spring Security et applique une configuration personnalisée.
 public class SpringSecurityConfiguration {

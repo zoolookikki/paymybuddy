@@ -1,13 +1,16 @@
 package com.cordierlaurent.paymybuddy.dto;
 
 import jakarta.validation.constraints.NotBlank;
+
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-//pour la saisie du formulaire d'inscription.
+/**
+ * For entering the registration form.
+ */
 /*
 @Data génère automatiquement des getters, setters, `toString`, equals, hashCode, et un constructeur par défaut => warning.
 Par défaut, Lombok génère equals() et hashCode() uniquement pour les champs de RegisterRequestDTO, et il ignore CommonUserDTO.

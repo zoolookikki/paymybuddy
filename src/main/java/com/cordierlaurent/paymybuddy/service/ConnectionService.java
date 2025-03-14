@@ -15,6 +15,12 @@ import com.cordierlaurent.paymybuddy.util.Result;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Service managing connections between users.
+ * <p>
+ * This class allows you to add a connection between two users, retrieve a user's connections, and obtain their friends list.
+ * </p>
+ */
 @Service
 @Log4j2
 public class ConnectionService {
@@ -28,6 +34,14 @@ public class ConnectionService {
     @Autowired
     private UserRepository userRepository;
         
+    
+    /**
+     * Adds a connection between the current user and another user specified by their email.
+     *
+     * @param user The current user who wishes to add a connection.
+     * @param email The email of the user to add as a friend.
+     * @return A Result object indicating the success or failure of the operation with an associated message.
+     */
     public Result add(User user, String email) {
         log.debug("ConnectionService.add,userId="+user.getId()+",email="+email);
 
@@ -73,10 +87,24 @@ public class ConnectionService {
         return new Result(true,"L'utilisateur " + email + " a été ajouté");
     }
     
+    
+    /**
+     * Retrieves all logins for a given user.
+     *
+     * @param userId The ID of the user whose connections we want to retrieve.
+     * @return A Connection list representing the user's connections.
+     */
     public List<Connection> getConnections(Long userId) {
         return connectionRepository.findByUserId(userId);
     }
     
+    
+    /**
+     * Retrieves the friends list of a given user.
+     *
+     * @param userId The ID of the user whose friends list we want to retrieve.
+     * @return A list of User representing the user's friends.
+     */
     public List<User> getFriends(Long userId) {
         log.debug("getFriends,userId="+userId);
         

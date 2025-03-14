@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//Classe de base, abstraite, pour l'e-mail, commune à plusieurs DTO.
+/**
+ * Base, abstract class for email, common to several DTOs.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

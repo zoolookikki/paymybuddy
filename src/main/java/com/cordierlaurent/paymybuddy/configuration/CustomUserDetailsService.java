@@ -15,8 +15,10 @@ import com.cordierlaurent.paymybuddy.repository.UserRepository;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * This service loads users from the database and integrates them with Spring Security.
+ */
 /*
-Ce service charge les utilisateurs depuis la base de données et les intégre à Spring Security.
 Il implémente UserDetailsService, une interface de Spring Security qui permet d’authentifier les utilisateurs sur la base des informations contenues dans une base de données.
 !! ATTENTION : La configuration de Spring Security doit prendre en compte cette classe via un AuthenticationManager (voir SpringSecurityConfiguration.java).
 */
@@ -24,7 +26,6 @@ Il implémente UserDetailsService, une interface de Spring Security qui permet d
 @Log4j2
 public class CustomUserDetailsService implements UserDetailsService {
 
-    // UserRepository est un DAO (Data Access Object) qui permet de récupérer les utilisateurs en base de données.
     @Autowired
     private UserRepository userRepository;
 

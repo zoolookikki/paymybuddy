@@ -7,7 +7,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-//pour la modification du formulaire concernant le profil.
+/**
+ * For modification of the profile form.
+ */
 /*
 @Data génère automatiquement des getters, setters, `toString`, equals, hashCode, et un constructeur par défaut => warning.
 Par défaut, Lombok génère equals() et hashCode() uniquement pour les champs de UpdateProfileRequestDTO, et il ignore CommonUserDTO.

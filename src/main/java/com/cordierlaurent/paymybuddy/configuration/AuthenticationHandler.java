@@ -10,7 +10,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-// interface de Spring Security qui permet de personnaliser ce qui se passe après une connexion réussie.
+/**
+ * Spring Security interface that allows you to customize what happens after a successful login.
+ */
 @Component
 public class AuthenticationHandler implements AuthenticationSuccessHandler {
 

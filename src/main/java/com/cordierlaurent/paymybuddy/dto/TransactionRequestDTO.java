@@ -9,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//pour la saisie de la transaction.
+/**
+ * For transaction entry.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

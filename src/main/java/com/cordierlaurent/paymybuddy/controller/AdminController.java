@@ -12,6 +12,12 @@ import com.cordierlaurent.paymybuddy.service.TransactionService;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Controller for the management of administrative operations related to transactions.
+ * <p>
+ * This class allows administrators to view a list of all transactions made by system users.
+ * </p>
+ */
 //@RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
 //@Controller pour renvoyer une vue HTML en utilisant Thymeleaf (ou un autre moteur de template).
 @Controller
@@ -22,6 +28,12 @@ public class AdminController {
     TransactionService transactionService;
     
     // .......................partie admin pour tests.................................
+    /**
+     * Displays the list of transactions for administration.
+     * 
+     * @param model The model for passing data to the Thymeleaf view.
+     * @return The name of the Thymeleaf view.
+     */    
     @GetMapping("/admin/transactions")
     public String displayAdminTransactions(Model model) {
         log.debug("GetMapping/admin/transactions");
@@ -33,7 +45,7 @@ public class AdminController {
         // permet d’ajouter à Model un objet de mon choix.
         model.addAttribute("transactions", transactions);
         
-        // Renvoie vers la page admin_transactions.html
+        // Retourne la vue affichant les transactions dans la page admin_transactions.html
         return "admin_transactions"; 
     }
 

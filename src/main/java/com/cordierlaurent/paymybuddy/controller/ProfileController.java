@@ -22,6 +22,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Controller managing the display and updating of the user profile (name, email, password).
+ */
 //@RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
 //@Controller pour renvoyer une vue HTML en utilisant Thymeleaf (ou un autre moteur de template).
 @Controller
@@ -30,9 +33,19 @@ public class ProfileController {
     
     @Autowired
     private UserService userService;
-        
+
+    /**
+     * Displays the profile edit form.
+     * <p>
+     * This method is called when a user accesses the profile.
+     * It loads the current information of the logged in user and pre-populates the form.
+     * </p>
+     *
+     * @param principal Contains the authenticated user's information.
+     * @param model The model for passing data to the Thymeleaf view.
+     * @return The "profile" view containing the update form.
+     */
     @GetMapping("/profile")
-    // Principal représente l'utilisateur actuellement authentifié => email est dans getName().
     public String displayProfileForm(Principal principal, Model model) {
         log.debug("GetMapping/profile");
         
@@ -44,13 +57,25 @@ public class ProfileController {
         return "profile";
     }
 
+    /**
+     * Updates user profile after form submission.
+     * <p>
+     * This method is called when a user submits an edit.
+     * It checks the validity of the data, applies the changes, and, if the email address changes, forces the user to log out and reconnect securely.
+     * </p>
+     *
+     * @param updateProfileRequestDTO Contains new profile information.
+     * @param bindingResult Result of form validation.
+     * @param principal Contains the authenticated user's information.
+     * @param model The model for passing data to the Thymeleaf view.
+     * @param request HTTP request used for session management.
+     * @param response HTTP response used for session management.
+     * @return Updated "profile" view or redirection to login page if email has changed.
+     */
     @PostMapping("/profile")
     // @ModelAttribute permet de lier les champs d’un formulaire HTML à un objet Java.
     // @Valid pour valider tout ce qui a été déclaré comme à contrôler dans le DTO.
     // BindingResult est une interface qui sert à capturer et gérer les erreurs de validation lorsqu’un formulaire est soumis => attention si on oublie => MethodArgumentNotValidException.
-    // Principal représente l'utilisateur actuellement authentifié => email est dans getName().
-    // Model permet de transmettre des données de la couche serveur (Java) vers la vue (Thymeleaf).
-    // HttpServletRequest et HttpServletResponse pour la déconnexion.
     public String updateProfile(
             @ModelAttribute("updateProfileRequest") @Valid UpdateProfileRequestDTO updateProfileRequest, 
             BindingResult bindingResult, 
