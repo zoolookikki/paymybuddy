@@ -18,6 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class AuthenticationEventListener {
 
+    // pour écouter des événements Spring (ici Spring Security) déjà existants.
     @EventListener
     // Capture puis journalise un événement de succès d'authentification.
     public void onAuthenticationSuccess(AuthenticationSuccessEvent event) {

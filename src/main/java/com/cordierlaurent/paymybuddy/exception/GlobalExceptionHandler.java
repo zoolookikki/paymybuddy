@@ -24,6 +24,7 @@ import lombok.extern.log4j.Log4j2;
  *     <li>A custom error page is returned.</li>
  * </ul>
  */
+// @ControllerAdvice permet de gérer toutes les erreurs en un seul endroit au lieu de devoir les gérer individuellement dans chaque contrôleur.
 @ControllerAdvice
 @Log4j2
 public class GlobalExceptionHandler {
@@ -34,6 +35,7 @@ public class GlobalExceptionHandler {
         return "myerror";
     }
 
+    // @ExceptionHandler Capture l'exception.
     @ExceptionHandler({
         UserNotFoundException.class,
         TransactionException.class,

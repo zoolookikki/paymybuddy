@@ -118,8 +118,8 @@ public class TestBillingServiceImpl implements BillingService {
      *
      * @param invoiceId The ID of the invoice to be deleted.
      */
-    public @Override
-    void deleteInvoice(Long invoiceId) {
+    @Override
+    public void deleteInvoice(Long invoiceId) {
         log.info("deleteInvoice,invoiceId="+invoiceId);
     }
     

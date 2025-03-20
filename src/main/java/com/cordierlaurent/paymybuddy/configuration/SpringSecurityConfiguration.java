@@ -27,8 +27,11 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
  * </ul>
  * </p>
  */
+
+// @Configuration indique que c'est une classe conteneur de beans géré par Spring (voir commentaire à propos de @Bean). 
 @Configuration
-@EnableWebSecurity // Active Spring Security et applique une configuration personnalisée.
+//Active Spring Security et applique une configuration personnalisée.
+@EnableWebSecurity 
 public class SpringSecurityConfiguration {
 
     @Autowired

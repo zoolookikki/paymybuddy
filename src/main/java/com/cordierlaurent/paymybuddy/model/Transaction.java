@@ -47,18 +47,24 @@ public class Transaction {
     @Column(nullable = false, insertable = false, updatable = false)
     private Timestamp createdAt;
     
-    // @ManyToOne car plusieurs transactions peuvent appartenir à un utilisateur éméteur.
-    // @JoinColumn au lieu @Column pour indiquer à JPA comment faire la relation @ManyToOne et donc faire la jointure automatiquement.
-    //@Column(name = "sender_id", nullable = false)
-    // private Long senderId;
+    /*
+    @ManyToOne car plusieurs transactions peuvent appartenir à un utilisateur éméteur.
+    @JoinColumn au lieu @Column pour indiquer à JPA comment faire la relation @ManyToOne et donc faire la jointure automatiquement.
+    au lieu de :
+        @Column(name = "sender_id", nullable = false)
+        private Long senderId;
+     */
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
-    // @ManyToOne car plusieurs transactions peuvent appartenir à un utilisateur bénéficiare.
-    // @JoinColumn au lieu @Column pour indiquer à JPA comment faire la relation @ManyToOne et donc faire la jointure automatiquement.
-    // @Column(name = "receiver_id", nullable = false)
-    // private Long receiverId;
+    /*
+    @ManyToOne car plusieurs transactions peuvent appartenir à un utilisateur bénéficiare.
+    @JoinColumn au lieu @Column pour indiquer à JPA comment faire la relation @ManyToOne et donc faire la jointure automatiquement.
+    au lieu de :
+        @Column(name = "receiver_id", nullable = false)
+        private Long receiverId;
+    */
     @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;

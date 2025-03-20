@@ -8,8 +8,6 @@ import lombok.extern.log4j.Log4j2;
 /**
  * Controller managing the display of login pages and user and administrator spaces.
  */
-// @RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
-// @Controller pour renvoyer une vue HTML en utilisant Thymeleaf (ou un autre moteur de template).
 @Controller
 @Log4j2
 public class LoginController {

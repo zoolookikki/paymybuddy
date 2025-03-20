@@ -18,8 +18,6 @@ import lombok.extern.log4j.Log4j2;
  * This class allows administrators to view a list of all transactions made by system users.
  * </p>
  */
-//@RestController uniquement si on veut renvoyer du JSON ou du texte brut, par exemple pour une API REST
-//@Controller pour renvoyer une vue HTML en utilisant Thymeleaf (ou un autre moteur de template).
 @Controller
 @Log4j2
 public class AdminController {

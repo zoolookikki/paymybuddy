@@ -11,7 +11,6 @@ Pas besoin de @Repository sur une interface JpaRepository
 Spring le détecte automatiquement et crée un bean sans configuration supplémentaire.
 */
 //@Repository
-//C'est un DAO (Data Access Object) qui permet de récupérer les utilisateurs en base de données
 public interface ConnectionRepository extends JpaRepository<Connection, Long> { 
     /*
     Méthodes utilisées déjà fournies par JpaRepository :    

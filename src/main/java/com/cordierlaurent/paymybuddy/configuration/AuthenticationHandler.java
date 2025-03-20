@@ -22,7 +22,8 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
    HttpServletResponse response : permet d'envoyer une réponse au navigateur.
    Authentication authentication : contient les détails de l'utilisateur authentifié (nom, rôles, etc.)
    */
-   @Override public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+   @Override 
+   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
       // redirection par défaut en cas de problème.
       String redirect = "/";
 
